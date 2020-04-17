@@ -10,7 +10,9 @@ function App() {
       <div className="capsule">
         <h2>Raptor Tracker App coming soon!</h2>
         <p>It will be awesome.</p>
-        <Map />
+        <div className='map-container'>
+          <Map />
+        </div>
       </div>
     </div>
   );
