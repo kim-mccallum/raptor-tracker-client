@@ -1,11 +1,17 @@
 import React from 'react';
+import Nav from './Components/Nav';
+import Map from './Components/Map'
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <h2>Raptor Tracker App coming soon!</h2>
-      <p>It will be awesome.</p>
+      <Nav />
+      <div className="capsule">
+        <h2>Raptor Tracker App coming soon!</h2>
+        <p>It will be awesome.</p>
+        <Map />
+      </div>
     </div>
   );
 }
