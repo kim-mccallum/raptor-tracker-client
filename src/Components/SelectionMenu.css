@@ -1,0 +1,17 @@
+.banner-overlay{
+    position: absolute;
+    width:50%;
+    height:100%;
+    background: rgba(194, 190, 180,0.8);
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px grey;
+    cursor:pointer;
+    padding: 8px;
+    z-index: 1000;
+  }
+  .closebtn{
+    float: right;
+    color:black;
+    padding:5px;
+    text-decoration: none;
+  }
