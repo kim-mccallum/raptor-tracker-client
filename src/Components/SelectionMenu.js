@@ -4,7 +4,7 @@ import './SelectionMenu.css'
 export default function SelectionMenu() {
     return (
         <div className="banner-overlay">
-            <h2>Coming soon</h2>
+            <h2>Menu overlay on map coming soon</h2>
         </div>
     )
 }
