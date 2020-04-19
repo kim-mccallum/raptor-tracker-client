@@ -1,3 +1,13 @@
+  /* STYLING THE SELECTION MENU IS COVERING MY MAP! */
+  .selection-menu{
+    height: 100vh;
+    position: absolute;
+    left: 25vw;
+    width:74vw;
+    display: inline-block;
+    z-index: 1000;
+  }
+
 .banner-overlay{
     position: absolute;
     width:50%;
@@ -9,7 +19,7 @@
     padding: 8px;
     z-index: 1000;
   }
-  .closebtn{
+  .close-btn{
     float: right;
     color:black;
     padding:5px;
