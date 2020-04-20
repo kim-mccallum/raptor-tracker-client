@@ -36,17 +36,17 @@ export default class SelectionMenu extends Component {
                             <fieldset>
                                 <legend>Select viewing parameters</legend>
                                 <label htmlFor="start-date">Start Date:</label>
-                                <input type="date" id="start-date" name="start-date" />
+                                <input type="date" id="start-date" name="start-date" /><br/>
                                 <label htmlFor="end-date">End Date:</label>
-                                <input type="date" id="end-date" name="end-date" />
-                                <label htmlFor="fname">Select Individuals:</label>
+                                <input type="date" id="end-date" name="end-date" /><br/>
+                                <label htmlFor="fname">Select Individuals:</label><br/>
                                 <select id="eagles" name="eagles">
                                     {/* Get this from a list of individuals in the data */}
+                                    <option value="All">All</option>
                                     <option value="Glenn">Glenn</option>
                                     <option value="Lewis">Lewis </option>
-                                    <option value="Frey">Frey</option>
-                                    <option value="Benedict">Benedict Cumberpatch</option>
-                                </select>
+                                    <option value="Frey">Frey</option>                                    
+                                </select><br/>
                                 <button type="submit" value="Submit">Map the data!</button>
                             </fieldset>
                         </form>

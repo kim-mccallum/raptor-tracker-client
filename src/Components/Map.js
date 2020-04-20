@@ -1,61 +1,58 @@
 import React from "react";
 import L from "leaflet";
-import { observationsFC } from '../observations-geojson-fc'
-
-class GeoJsonPt{
-    constructor(json) {
-        this.type = "Feature";
-        this.geometry = {
-            type:"Point",
-            coordinates:[json.location_long, json.location_lat]
-        };
-        this.properties = {
-        id: json.id, 
-        individual_id: json.individual_id,
-        time_stamp: json.time_stamp,
-        heading: json.heading,
-        ground_speed: json.ground_speed
-        }
-    }
-    createGeoJson(){   
-    }
-}
+import { observationsFC } from "../observations-geojson-fc";
 
 class Map extends React.Component {
+  state = {
+    data: [],
+  };
   componentDidMount() {
-    // create map
-    this.map = L.map("map", {
-      center: [38.81367, -112.266],
-      zoom: 7,
-      layers: [
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
-            maxZoom: 12
-        })
-      ],
-    });
-
-    this.observations = L.geoJSON(observationsFC).bindPopup(function(layer){
-        return `Eagle name: ${layer.feature.properties.individual_id} Time: ${new Date(Number(layer.feature.properties.time_stamp))}`;
-    }).addTo(this.map);
-
-    this.map.fitBounds(this.observations.getBounds(), {
-        padding: [100, 100]
-    })
-  }
-
-  //Trying to make a method that uses the GeoJsonPt Class and converts array data from state
-  dataToGeoJson = (arrObs) => {
-        let fcObj = {
-        "type": "FeatureCollection",
-        "features": []
+    let map = L.map("map", {
+        zoomControl: false, 
+        layers: [
+            L.tileLayer(
+            "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
+            {
+                attribution:
+                "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC",
+                maxZoom: 12,
+            }
+            ),
+        ],
+        });
+        // array to hold individual bird data
+        let a = [];
+        let obj = {};
+        this.props.observations.forEach((point) => {
+        let { location_lat, location_long, id, time_stamp, individual_id } = point;
+        a.push([location_lat, location_long]);
+        if (!obj[individual_id]) {
+            obj[individual_id] = {
+            coords: [],
+            time_stamp: [],
+            };
+        }
+        obj[individual_id].coords.push([location_lat, location_long]);
+        obj[individual_id].time_stamp.push([time_stamp]);
+        });
+        // let arr = ['jorge', 'piquer']
+        // let [firstname, lastname] = arr
+        for (let [key, value] of Object.entries(obj)) {
+            var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+            let polyline = L.polyline(value.coords, { color: randomColor }).addTo(
+            map
+            );
+        value.coords.forEach((coord, index) => {
+            new L.marker(coord)
+            .bindPopup(() => {
+                return `name: ${key} time: ${value.time_stamp[index]}`;
+            })
+            .addTo(map);
+        });
+        }
+        var myBounds = new L.LatLngBounds(a);
+        map.fitBounds(myBounds, { padding: [100, 100] });
     }
-    fcObj.features = arrObs.map(obj => new GeoJsonPt(obj))
-
-    return JSON.stringify(fcObj)
-    }
-
-
   render() {
     //   console.log(this.props.observations)
     return <div style={{ width: "74vw", height: "100vh" }} id="map"></div>;

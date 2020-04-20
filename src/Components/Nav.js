@@ -7,7 +7,7 @@ export default class Nav extends Component {
         super(props)
     
         this.state = {
-             isMenuVisible: true
+             isMenuVisible: false
         }
     }
 
