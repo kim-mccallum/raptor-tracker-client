@@ -8,17 +8,40 @@ class Map extends React.Component {
   componentDidMount() {
     let map = L.map("map", {
         zoomControl: false, 
-        layers: [
-            L.tileLayer(
-            "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
-            {
-                attribution:
-                "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC",
-                maxZoom: 12,
-            }
-            ),
-        ],
+        // layers: [
+        //     L.tileLayer(
+        //     "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
+        //     {
+        //         attribution:
+        //         "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC",
+        //         maxZoom: 12,
+        //     }),
+        // ],
         });
+        //add basemap layers
+        const natGeo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+            maxZoom: 16
+        }).addTo(map);
+
+        // Satellite/Aerial imagery
+        const Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+            maxZoom: 16
+        });
+
+        createLayerSwitcher();
+        // function to create a layer switcher control
+        function createLayerSwitcher() {
+        // define basemap and add layer switcher control
+            const basemaps = {
+                "National Geographic": natGeo,
+                "World Imagery": Esri_WorldImagery
+            };
+        L.control.layers(basemaps).addTo(map);
+        }
+
+
         // array to hold individual bird data
         let indArr = [];
         let obj = {};
