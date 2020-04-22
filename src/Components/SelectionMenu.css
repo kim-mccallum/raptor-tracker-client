@@ -2,8 +2,8 @@
   .selection-menu{
     height: 100vh;
     position: absolute;
-    left: 25vw;
-    width:74vw;
+    left: 15vw;
+    width:60vw;
     display: inline-block;
     z-index: 1000;
   }

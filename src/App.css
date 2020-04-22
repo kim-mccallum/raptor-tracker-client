@@ -12,7 +12,7 @@ body {
 .capsule{
   height: 100vh;
   position: absolute;
-  left: 25vw;
-  width:74vw;
+  left: 15vw;
+  width:84vw;
   display: inline-block;
 }

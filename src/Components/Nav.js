@@ -28,8 +28,7 @@ export default class Nav extends Component {
                 <nav className='app-nav' onClick={this.props.hideBanner}>
                     <img className="logo" src="https://hawkwatch.org/images/HWI-logo_tag2.png" alt="HWI logo"/>
                     <ul>
-                        <li><a href="#Eagles" className="active" onClick={this.handleToggleMenu}>Golden Eagles</a></li>
-                        <li><a href="#Vultures" onClick={this.handleToggleMenu}>African Vultures</a></li>
+                        <li><a href="#Select-Data" className="active" onClick={this.handleToggleMenu}>Select Data</a></li>
                         <li><a href="https://hawkwatch.org/our-work/tracking" target="blank">Learn about tracking research</a></li>
                         <li><a href="https://hawkwatch.org/about/contact-us" target="blank">Contact</a></li>
                     </ul>

@@ -53,7 +53,7 @@ class Map extends React.Component {
     }
   render() {
     //   console.log(this.props.observations)
-    return <div style={{ width: "74vw", height: "100vh" }} id="map" onClick={this.props.hideBanner}></div>;
+    return <div style={{ width: "84vw", height: "100vh" }} id="map" onClick={this.props.hideBanner}></div>;
   }
 }
 export default Map;
