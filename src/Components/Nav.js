@@ -25,7 +25,7 @@ export default class Nav extends Component {
         }
         return (
             <>
-                <nav className='app-nav'>
+                <nav className='app-nav' onClick={this.props.hideBanner}>
                     <img className="logo" src="https://hawkwatch.org/images/HWI-logo_tag2.png" alt="HWI logo"/>
                     <ul>
                         <li><a href="#Eagles" className="active" onClick={this.handleToggleMenu}>Golden Eagles</a></li>

@@ -1,6 +1,5 @@
 import React from "react";
 import L from "leaflet";
-import { observationsFC } from "../observations-geojson-fc";
 
 class Map extends React.Component {
   state = {
@@ -21,22 +20,21 @@ class Map extends React.Component {
         ],
         });
         // array to hold individual bird data
-        let a = [];
+        let indArr = [];
         let obj = {};
         this.props.observations.forEach((point) => {
-        let { location_lat, location_long, id, time_stamp, individual_id } = point;
-        a.push([location_lat, location_long]);
-        if (!obj[individual_id]) {
-            obj[individual_id] = {
-            coords: [],
-            time_stamp: [],
-            };
-        }
-        obj[individual_id].coords.push([location_lat, location_long]);
-        obj[individual_id].time_stamp.push([time_stamp]);
+            let { location_lat, location_long, time_stamp, individual_id } = point;
+            indArr.push([location_lat, location_long]);
+            if (!obj[individual_id]) {
+                obj[individual_id] = {
+                coords: [],
+                time_stamp: [],
+                };
+            }
+            obj[individual_id].coords.push([location_lat, location_long]);
+            obj[individual_id].time_stamp.push([time_stamp]);
         });
-        // let arr = ['jorge', 'piquer']
-        // let [firstname, lastname] = arr
+
         for (let [key, value] of Object.entries(obj)) {
             var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
             let polyline = L.polyline(value.coords, { color: randomColor }).addTo(
@@ -45,17 +43,17 @@ class Map extends React.Component {
         value.coords.forEach((coord, index) => {
             new L.marker(coord)
             .bindPopup(() => {
-                return `name: ${key} time: ${value.time_stamp[index]}`;
+                return `name: ${key} time: ${new Date(Number(value.time_stamp[index]))}`;
             })
             .addTo(map);
         });
         }
-        var myBounds = new L.LatLngBounds(a);
+        var myBounds = new L.LatLngBounds(indArr);
         map.fitBounds(myBounds, { padding: [100, 100] });
     }
   render() {
     //   console.log(this.props.observations)
-    return <div style={{ width: "74vw", height: "100vh" }} id="map"></div>;
+    return <div style={{ width: "74vw", height: "100vh" }} id="map" onClick={this.props.hideBanner}></div>;
   }
 }
 export default Map;

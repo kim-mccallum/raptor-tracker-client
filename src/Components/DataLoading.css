@@ -1,0 +1,13 @@
+.data-loading{
+    position: absolute;
+    top:120px;
+    left:150px;
+    width:32%;
+    height:20%;
+    background: rgba(194, 190, 180,0.8);
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px grey;
+    cursor:pointer;
+    padding: 8px;
+    z-index: 1000;
+  }

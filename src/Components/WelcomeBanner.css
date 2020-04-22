@@ -1,0 +1,19 @@
+.welcome-banner-overlay{
+    top: 50px;
+    left: 75px;
+    position: absolute;
+    width:60%;
+    height:40%;
+    background: rgba(194, 190, 180,0.8);
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px grey;
+    cursor:pointer;
+    padding: 8px;
+    z-index: 1000;
+  }
+  .close-btn{
+    float: right;
+    color:black;
+    padding:5px;
+    text-decoration: none;
+  }
