@@ -9,6 +9,7 @@ export default class SelectionMenu extends Component {
         // Change these 
         this.state = {
             species: 'all',
+            // probably don't need both tracking period and startDate/endDate
             trackingPeriod: {
                value: '',
                touched: false
@@ -23,8 +24,12 @@ export default class SelectionMenu extends Component {
             }
         }
     }
-    // Add handlers to get the data. 
-    // The selected data will need to be passed back to App and to Map to render on the map
+    // Add handlers to get the data and put it into state
+        // The selected data will need to be passed back to App and to Map to render on the map
+    // Format dates as timestamps and get start_date and end_date to be formatted and ready for server request
+            // Week: start_date = today and end_date = start_date 7 days
+            // Month: start_date = today and end_date = start_date 31 days
+            // Year: start_date = today and end_date = start_date 365 days
     
     render() {
         return (
@@ -41,7 +46,6 @@ export default class SelectionMenu extends Component {
                                 <legend>Select map data</legend>
                                 <label htmlFor="species">Select species:</label><br/>
                                 <select id="species" name="species">
-                                    {/* Get this from a list of individuals in the data */}
                                     <option value="all">All</option>
                                     <option value="golden-eagles">Golden eagles</option>
                                     <option value="african-vultures">African vultures </option>                    

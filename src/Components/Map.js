@@ -31,24 +31,20 @@ class Map extends React.Component {
             maxZoom: 16
         });
 
-        createLayerSwitcher();
-        // function to create a layer switcher control
-        function createLayerSwitcher() {
-        // define basemap and add layer switcher control
-            const basemaps = {
-                "National Geographic": natGeo,
-                "World Imagery": Esri_WorldImagery
-            };
+        const basemaps = {
+            "National Geographic": natGeo,
+            "World Imagery": Esri_WorldImagery
+        };
+
         L.control.layers(basemaps).addTo(map);
-        }
 
         console.log(this.props.observations)
         // array to hold individual bird data
-        let indArr = [];
+        let ptArr = [];
         let obj = {};
         this.props.observations.forEach((point) => {
             let { location_lat, location_long, time_stamp, individual_id } = point;
-            indArr.push([location_lat, location_long]);
+            ptArr.push([location_lat, location_long]);
             if (!obj[individual_id]) {
                 obj[individual_id] = {
                 coords: [],
@@ -72,8 +68,8 @@ class Map extends React.Component {
             .addTo(map);
         });
         }
-        console.log(indArr)
-        var myBounds = new L.LatLngBounds(indArr);
+        console.log(ptArr)
+        var myBounds = new L.LatLngBounds(ptArr);
         map.fitBounds(myBounds, { padding: [100, 100] });
     }
   render() {

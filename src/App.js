@@ -13,7 +13,7 @@ export default class App extends Component {
   
     this.state = {
       bannerVisible: true,
-       dataLoading: true,
+      dataLoading: true,
       //  Golden eagles
        species: '',
       //  By default: one year of data
@@ -28,17 +28,8 @@ export default class App extends Component {
   componentDidMount() {
     // const url = 'Simulate API call for now';
     const url = `${config.API_ENDPOINT}/observations/last`
-
     // first - update and setState loading to true
-    this.setState({ dataLoading: true })
-    
-    // then - make fetch to url
-    // inside the .then() 
-    // before you put the data into the state, 
-        // STORE.sort((a,b) => {
-        //     return parseInt(a.time_stamp) - parseInt(b.time_stamp)
-        //   })
-    // -map data to sort it and update loading to false - this is the last step
+    // this.setState({ dataLoading: true })
 
     //add loading logic
     this.setState({ dataLoading: true }, () => {
@@ -52,7 +43,8 @@ export default class App extends Component {
         .then((res) => res.json())
         .then((data) => {
           console.log(`got the data: ${data}`)
-          data.sort((a,b) => {
+          data.sort((a, b) => {
+              // Check the order here
               return parseInt(a.time_stamp) - parseInt(b.time_stamp)
             })
           this.setState({
@@ -81,17 +73,17 @@ export default class App extends Component {
     // in state - property called dataLoading: true, when you get the data set it to false
     // if it's true, show the DataLoading and if false, show the Map
     let loading;
-    if(this.state.dataLoading === true){
+    if(this.state.dataLoading){
       loading = <DataLoading />
     }
     let map;
-    if(this.state.dataLoading === false){
+    if(!this.state.dataLoading){
       map = <div className='map-container'>
               <Map observations={this.state.mapData} hideBanner={this.handleBanner}/>
             </div>
     }
     let banner; 
-    if(this.state.bannerVisible === true){
+    if(this.state.bannerVisible){
       loading = <WelcomeBanner hideBanner={this.handleBanner}/>
     }
     return (
