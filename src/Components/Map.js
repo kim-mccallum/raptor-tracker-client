@@ -5,6 +5,7 @@ class Map extends React.Component {
   state = {
     data: [],
   };
+  
   componentDidMount() {
     let map = L.map("map", {
         zoomControl: false, 
@@ -41,7 +42,7 @@ class Map extends React.Component {
         L.control.layers(basemaps).addTo(map);
         }
 
-
+        console.log(this.props.observations)
         // array to hold individual bird data
         let indArr = [];
         let obj = {};
@@ -71,6 +72,7 @@ class Map extends React.Component {
             .addTo(map);
         });
         }
+        console.log(indArr)
         var myBounds = new L.LatLngBounds(indArr);
         map.fitBounds(myBounds, { padding: [100, 100] });
     }

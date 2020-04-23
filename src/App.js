@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import config from './config';
 import Nav from './Components/Nav';
 import Map from './Components/Map'
 import DataLoading from './Components/DataLoading'
@@ -12,42 +13,32 @@ export default class App extends Component {
   
     this.state = {
       bannerVisible: true,
-       dataLoading: false,
+       dataLoading: true,
       //  Golden eagles
        species: '',
       //  By default: one year of data
        dates: [],
        individuals: [],
        authenticated: true,
-       mapData: STORE.sort((a,b) => {
-        return parseInt(a.time_stamp) - parseInt(b.time_stamp)
-      })
+       mapData: []
     }
   }
   
   // api request - simulated for now
   componentDidMount() {
-    const url = 'Simulate API call for now';
+    // const url = 'Simulate API call for now';
+    const url = `${config.API_ENDPOINT}/observations/last`
 
+    // first - update and setState loading to true
     this.setState({ dataLoading: true })
-    console.log(this.state.dataLoading)
-
-    let sortedTimestamps = STORE.sort((a,b) => {
-      return parseInt(a.time_stamp) - parseInt(b.time_stamp)
-    });
-    this.setState({ 
-      dataLoading: false,
-      mapData: sortedTimestamps
-    });
-
-    setTimeout(() => {
-      console.log('Data has now loaded!');
-      console.log(this.state.dataLoading)
-      this.setState({ 
-        dataLoading: false,
-        mapData: STORE
-       })
-    }, 3000);
+    
+    // then - make fetch to url
+    // inside the .then() 
+    // before you put the data into the state, 
+        // STORE.sort((a,b) => {
+        //     return parseInt(a.time_stamp) - parseInt(b.time_stamp)
+        //   })
+    // -map data to sort it and update loading to false - this is the last step
 
     //add loading logic
     this.setState({ dataLoading: true }, () => {
@@ -60,6 +51,10 @@ export default class App extends Component {
         })
         .then((res) => res.json())
         .then((data) => {
+          console.log(`got the data: ${data}`)
+          data.sort((a,b) => {
+              return parseInt(a.time_stamp) - parseInt(b.time_stamp)
+            })
           this.setState({
             mapData: data,
             error: null,
@@ -83,9 +78,17 @@ export default class App extends Component {
 }
 
   render() {
+    // in state - property called dataLoading: true, when you get the data set it to false
+    // if it's true, show the DataLoading and if false, show the Map
     let loading;
     if(this.state.dataLoading === true){
       loading = <DataLoading />
+    }
+    let map;
+    if(this.state.dataLoading === false){
+      map = <div className='map-container'>
+              <Map observations={this.state.mapData} hideBanner={this.handleBanner}/>
+            </div>
     }
     let banner; 
     if(this.state.bannerVisible === true){
@@ -101,9 +104,7 @@ export default class App extends Component {
         <>
           {banner}
         </>
-        <div className='map-container'>
-          <Map observations={this.state.mapData} hideBanner={this.handleBanner}/>
-        </div>
+          {map}
       </div>
     </div>
     )
