@@ -7,6 +7,7 @@ class Map extends React.Component {
   };
   
   componentDidMount() {
+      let marker;
     let map = L.map("map", {
         zoomControl: false, 
         // layers: [
@@ -38,7 +39,7 @@ class Map extends React.Component {
 
         L.control.layers(basemaps).addTo(map);
 
-        console.log(this.props.observations)
+        console.log(this.props)
         // array to hold individual bird data
         let ptArr = [];
         let obj = {};
@@ -60,15 +61,23 @@ class Map extends React.Component {
             let polyline = L.polyline(value.coords, { color: randomColor }).addTo(
             map
             );
+        console.log(obj)
         value.coords.forEach((coord, index) => {
-            new L.marker(coord)
+            marker = new L.marker(coord)
             .bindPopup(() => {
                 return `name: ${key} time: ${new Date(Number(value.time_stamp[index]))}`;
             })
             .addTo(map);
+
+            // marker.on("click", (e) => {
+            //     // console.log(e)
+            //     this.props.markerHandler(key)
+            //  })
         });
         }
-        console.log(ptArr)
+
+
+        // console.log(ptArr)
         var myBounds = new L.LatLngBounds(ptArr);
         map.fitBounds(myBounds, { padding: [100, 100] });
     }
