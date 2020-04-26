@@ -65,37 +65,36 @@ export default class App extends Component {
 
     const url = `${baseUrl}${params}`
 
-    // this.setState({ dataLoading: true }, () => {
-    //   fetch(url)
-    //     .then((res) => {
-    //       if (!res.ok) {
-    //         throw new Error("Something went wrong, please try again later.");
-    //       }
-    //       return res;
-    //     })
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       console.log(`got the data: ${data}`)
-    //       data.sort((a, b) => {
-    //           // Check the order here
-    //           return parseInt(a.time_stamp) - parseInt(b.time_stamp)
-    //         })
-    //       this.setState({
-    //         // change later
-    //         mapData: data,
-    //         error: null,
-    //         dataLoading: false,
-    //       }, () => {
-    //         this.setState({ shouldUpdate: false })
-    //       });
-    //     })
-    //     .catch((err) => {
-    //       this.setState({
-    //         error: err.message,
-    //       });
-    //     });
-    // });
-
+    this.setState({ dataLoading: true }, () => {
+      fetch(url)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Something went wrong, please try again later.");
+          }
+          return res;
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(`got the data: ${data}`)
+          data.sort((a, b) => {
+              // Check the order here
+              return parseInt(a.time_stamp) - parseInt(b.time_stamp)
+            })
+          this.setState({
+            // change later
+            mapData: data,
+            error: null,
+            dataLoading: false,
+          }, () => {
+            this.setState({ shouldUpdate: false })
+          });
+        })
+        .catch((err) => {
+          this.setState({
+            error: err.message,
+          });
+        });
+    });
   }
   onMarkerClick = (name) => {
     // do this later to handle the marker click

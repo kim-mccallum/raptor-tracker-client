@@ -7,19 +7,11 @@ class Map extends React.Component {
   };
   
   componentDidMount() {
-      let marker;
-    let map = L.map("map", {
-        zoomControl: false, 
-        // layers: [
-        //     L.tileLayer(
-        //     "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
-        //     {
-        //         attribution:
-        //         "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC",
-        //         maxZoom: 12,
-        //     }),
-        // ],
-        });
+    //   let marker;
+      let map = L.map("map", {
+        zoomControl: false,
+        preferCanvas: true,
+      });
         //add basemap layers
         const natGeo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
             attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
@@ -63,16 +55,16 @@ class Map extends React.Component {
             );
         console.log(obj)
         value.coords.forEach((coord, index) => {
-            marker = new L.marker(coord)
+            let marker = new L.circleMarker(coord)
             .bindPopup(() => {
                 return `name: ${key} time: ${new Date(Number(value.time_stamp[index]))}`;
             })
             .addTo(map);
 
-            // marker.on("click", (e) => {
-            //     // console.log(e)
-            //     this.props.markerHandler(key)
-            //  })
+            marker.on("click", (e) => {
+                // console.log(e)
+                this.props.markerHandler(key)
+             })
         });
         }
 
@@ -83,7 +75,7 @@ class Map extends React.Component {
     }
   render() {
     //   console.log(this.props.observations)
-    return <div style={{ width: "84vw", height: "100vh" }} id="map" onClick={this.props.hideBanner}></div>;
+    return <div style={{ width: "84vw", height: "100vh" }} id="map"></div>;
   }
 }
 export default Map;
