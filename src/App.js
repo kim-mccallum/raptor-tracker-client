@@ -41,6 +41,7 @@ export default class App extends Component {
               return parseInt(a.time_stamp) - parseInt(b.time_stamp)
             })
           this.setState({
+            //  Change to recentData
             mapData: data,
             error: null,
             dataLoading: false,
@@ -81,7 +82,7 @@ export default class App extends Component {
               return parseInt(a.time_stamp) - parseInt(b.time_stamp)
             })
           this.setState({
-            // change later
+            // change later to pathData
             mapData: data,
             error: null,
             dataLoading: false,
@@ -121,7 +122,8 @@ export default class App extends Component {
     let map;
     if(!this.state.dataLoading){
       map = <div className='map-container'>
-              <Map observations={this.state.mapData} hideBanner={this.handleBanner} markerHandler={this.onMarkerClick}/>
+              {/* Change to pass recentData and pathData */}
+              <Map observations={this.state.mapData} markerHandler={this.onMarkerClick}/>
             </div>
     }
     let banner; 

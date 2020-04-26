@@ -31,9 +31,23 @@ class Map extends React.Component {
 
         L.control.layers(basemaps).addTo(map);
 
-        console.log(this.props)
+        // Add the recentData first
+        // this.props.recentData((obs) => {
+        //     let marker = new L.Marker([obs.location_lat, obs.location_long])
+        //     .bindPopup(() => {
+        //         return `name: ${obs.individual_id} time: ${obs.time_stamp}`;
+        //     })
+        //     .addTo(map);
+
+        //     marker.on("click", (e) => {
+        //         this.props.markerHandler(obs.individual_id)
+        //     })
+        // })
+        
+
         // array to hold individual bird data
         let ptArr = [];
+        // Object with individual_id as keys and values as arrays of locations
         let obj = {};
         this.props.observations.forEach((point) => {
             let { location_lat, location_long, time_stamp, individual_id } = point;
@@ -50,27 +64,27 @@ class Map extends React.Component {
 
         for (let [key, value] of Object.entries(obj)) {
             var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-            let polyline = L.polyline(value.coords, { color: randomColor }).addTo(
-            map
-            );
-        console.log(obj)
-        value.coords.forEach((coord, index) => {
-            let marker = new L.circleMarker(coord)
-            .bindPopup(() => {
-                return `name: ${key} time: ${new Date(Number(value.time_stamp[index]))}`;
-            })
-            .addTo(map);
+            let polyline = L.polyline(value.coords, { color: randomColor }).addTo(map);
 
-            marker.on("click", (e) => {
-                // console.log(e)
-                this.props.markerHandler(key)
-             })
-        });
+            console.log(obj)
+            value.coords.forEach((coord, index) => {
+                let marker = new L.circleMarker(coord)
+                .bindPopup(() => {
+                    return `name: ${key} time: ${new Date(Number(value.time_stamp[index]))}`;
+                })
+                .addTo(map);
+
+                // attach this to the recentData marker
+                marker.on("click", (e) => {
+                    // console.log(e)
+                    this.props.markerHandler(key)
+                })
+            });
         }
 
-
-        // console.log(ptArr)
+        console.log(ptArr)
         var myBounds = new L.LatLngBounds(ptArr);
+        // This causes a problem for situations in which there is only one point
         map.fitBounds(myBounds, { padding: [100, 100] });
     }
   render() {
