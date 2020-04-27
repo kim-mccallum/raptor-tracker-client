@@ -31,10 +31,11 @@ class Map extends React.Component {
         L.control.layers(basemaps).addTo(map);
         // TRY TO ADD ICON
         var eagleIcon = L.icon({
-			iconUrl: require('../graphics/vulture.svg'),
+            // iconUrl: require('../graphics/vulture.svg'),
+            iconUrl: require('../graphics/eagle-1.svg'),
 			iconSize: [50,55],
             // iconAnchor: [32,74],
-            iconAnchor: [24,43],
+            iconAnchor: [28,43],
 			popupAnchor: [0,-50]
         });
         
@@ -54,7 +55,16 @@ class Map extends React.Component {
             })
         })
 
-        let testPoint = this.props.recentData[0]
+        let testPoint = {
+            "id": 17,
+            "individual_id": "GE412",
+            "time_stamp": "1530212400000",
+            "location_long": -110.53551661995617,
+            "location_lat": 39.531690217115106,
+            "heading": "0",
+            "ground_speed": "0"
+        }
+        // let testPoint = this.props.recentData[0]
 
         // let testMarker = new L.Marker([testPoint.location_lat, testPoint.location_long], {icon: eagleIcon}).bindPopup(() => {
         //         return `name: ${testPoint.individual_id} time: ${testPoint.time_stamp}`;
@@ -77,7 +87,6 @@ class Map extends React.Component {
         let obj = {};
         this.props.observations.forEach((point) => {
             let { location_lat, location_long, time_stamp, individual_id } = point;
-            // ptArr.push([location_lat, location_long]);
             if (!obj[individual_id]) {
                 obj[individual_id] = {
                 coords: [],
@@ -94,11 +103,8 @@ class Map extends React.Component {
         }
 
         for (let [key, value] of Object.entries(obj)) {
-            // var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-            // let polyline = L.polyline(value.coords, { color: randomColor }).addTo(map);
             let polyline = L.polyline(value.coords, { color: '#2d1bf7' }).addTo(map);
 
-            // console.log(obj)
             value.coords.forEach((coord, index) => {
                 let marker = new L.circleMarker(coord, {radius:5, color:'#5f6061'})
                 .bindPopup(() => {

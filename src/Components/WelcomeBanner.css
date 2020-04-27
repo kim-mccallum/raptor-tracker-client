@@ -1,9 +1,9 @@
-.backdrop{
-/* take up whole screen */
-  height: 100vh;
+.backdrop {
   z-index: 999;
-  background-color: black;
-  /* opacity: 0.1; */
+  top: 0px;
+  height: 100vh;
+  width: 100%;
+  position: fixed;
 }
 .welcome-banner-overlay{
     top: 120px;

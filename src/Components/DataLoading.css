@@ -1,13 +1,19 @@
 .data-loading{
     position: absolute;
     top:200px;
-    left:200px;
-    width:32%;
-    height:20%;
+    left:220px;
+    padding: 75px;
+    width:60%;
+    height:40%;
     background: rgba(194, 190, 180,0.8);
     border-radius: 4px;
     box-shadow: 1px 1px 1px grey;
     cursor:pointer;
     padding: 8px;
     z-index: 1000;
+    border: 10px solid hotpink;
   }
+
+.data-loading h2{
+  text-align: center;
+}

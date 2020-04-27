@@ -123,13 +123,23 @@ export default class App extends Component {
     let map;
     if(!this.state.dataLoading){
       map = <div className='map-container'>
-              {/* Change to pass recentData and pathData */}
               <Map observations={this.state.pathData} recentData={this.state.recentData} markerHandler={this.onMarkerClick}/>
             </div>
     }
     let banner; 
     if(this.state.bannerVisible){
-      loading = <WelcomeBanner hideBanner={this.handleBanner}/>
+      return (
+      <div className="App">
+      <Nav hideBanner={this.handleBanner}/>
+      <div className="capsule">
+        <WelcomeBanner hideBanner={this.handleBanner}/>
+        <>
+          {banner}
+        </>
+          {map}
+      </div>
+    </div>
+    )
     }
 
     return (

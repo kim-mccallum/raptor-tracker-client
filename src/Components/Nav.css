@@ -39,11 +39,6 @@
     display: inline-block;
   }
 
-  /* .selection-menu{
-    height: 100vh;
-    position: absolute;
-    left: 25vw;
-    width:74vw;
-    display: inline-block;
-    z-index: 1000;
-  } */
+.placeholder{
+  color: white;
+}
