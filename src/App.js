@@ -15,7 +15,7 @@ export default class App extends Component {
       individual_id: '',
       start_time: '',
       end_time: '', 
-      mapData: [],
+      recentData: [],
       pathData: []
     }
   
@@ -35,14 +35,15 @@ export default class App extends Component {
         })
         .then((res) => res.json())
         .then((data) => {
-          console.log(`got the data: ${data}`)
+          console.log(typeof(data[0].time_stamp))
           data.sort((a, b) => {
-              // Check the order here
-              return parseInt(a.time_stamp) - parseInt(b.time_stamp)
+              // Check the order here and fix to deal with string timestamp
+              return (new Date(a.time_stamp).getTime()) - (new Date(b.time_stamp).getTime()) 
+              // return parseInt(a.time_stamp) - parseInt(b.time_stamp)
             })
           this.setState({
             //  Change to recentData
-            mapData: data,
+            recentData: data,
             error: null,
             dataLoading: false,
           });
@@ -78,12 +79,12 @@ export default class App extends Component {
         .then((data) => {
           console.log(`got the data: ${data}`)
           data.sort((a, b) => {
-              // Check the order here
-              return parseInt(a.time_stamp) - parseInt(b.time_stamp)
+              // Check the order here - This is not right with new date format!
+              return (new Date(a.time_stamp).getTime()) - (new Date(b.time_stamp).getTime()) 
             })
           this.setState({
             // change later to pathData
-            mapData: data,
+            pathData: data,
             error: null,
             dataLoading: false,
           }, () => {
@@ -123,7 +124,7 @@ export default class App extends Component {
     if(!this.state.dataLoading){
       map = <div className='map-container'>
               {/* Change to pass recentData and pathData */}
-              <Map observations={this.state.mapData} markerHandler={this.onMarkerClick}/>
+              <Map observations={this.state.pathData} recentData={this.state.recentData} markerHandler={this.onMarkerClick}/>
             </div>
     }
     let banner; 
@@ -131,7 +132,6 @@ export default class App extends Component {
       loading = <WelcomeBanner hideBanner={this.handleBanner}/>
     }
 
-    console.log(this.state.individual_id)
     return (
       <div className="App">
       <Nav hideBanner={this.handleBanner}/>

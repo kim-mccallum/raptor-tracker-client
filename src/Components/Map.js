@@ -2,9 +2,6 @@ import React from "react";
 import L from "leaflet";
 
 class Map extends React.Component {
-  state = {
-    data: [],
-  };
   
   componentDidMount() {
     //   let marker;
@@ -32,21 +29,24 @@ class Map extends React.Component {
         L.control.layers(basemaps).addTo(map);
 
         // Add the recentData first
-        // this.props.recentData((obs) => {
-        //     let marker = new L.Marker([obs.location_lat, obs.location_long])
-        //     .bindPopup(() => {
-        //         return `name: ${obs.individual_id} time: ${obs.time_stamp}`;
-        //     })
-        //     .addTo(map);
+        this.props.recentData.forEach((obs) => {
+            let marker = new L.Marker([obs.location_lat, obs.location_long])
+            .bindPopup(() => {
+                return `name: ${obs.individual_id} time: ${obs.time_stamp}`;
+            })
+            .addTo(map);
 
-        //     marker.on("click", (e) => {
-        //         this.props.markerHandler(obs.individual_id)
-        //     })
-        // })
-        
+            marker.on("click", (e) => {
+                this.props.markerHandler(obs.individual_id)
+            })
+        })
 
-        // array to hold individual bird data
+        // array to hold individual bird data just for map bounds
         let ptArr = [];
+        this.props.recentData.forEach((point) => {
+            let { location_lat, location_long } = point;
+            ptArr.push([location_lat, location_long]);
+        })
         // Object with individual_id as keys and values as arrays of locations
         let obj = {};
         this.props.observations.forEach((point) => {
@@ -61,30 +61,34 @@ class Map extends React.Component {
             obj[individual_id].coords.push([location_lat, location_long]);
             obj[individual_id].time_stamp.push([time_stamp]);
         });
+        
+        // PUT THIS IN A FUNCTION TO BE DRY SO YOU CAN USE IT FOR BOTH DATASETS 
+        // function makePtArray(observations) - return an array of coordinates
+        const fitBounds = observationData => {
+            console.log('take the logic for creating an array of coordinates and then call fit bounds')
+        }
 
+        // Put this in a function renderPath() 
+        const renderPath = observationData => {
+            console.log('I will take data, create an object and render a path on the map')
+        }
         for (let [key, value] of Object.entries(obj)) {
             var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
             let polyline = L.polyline(value.coords, { color: randomColor }).addTo(map);
 
-            console.log(obj)
+            // console.log(obj)
             value.coords.forEach((coord, index) => {
-                let marker = new L.circleMarker(coord)
+                let marker = new L.circleMarker(coord, {color:'#006600'})
                 .bindPopup(() => {
-                    return `name: ${key} time: ${new Date(Number(value.time_stamp[index]))}`;
+                    return `name: ${key} time: ${value.time_stamp[index]}`;
                 })
                 .addTo(map);
-
-                // attach this to the recentData marker
-                marker.on("click", (e) => {
-                    // console.log(e)
-                    this.props.markerHandler(key)
-                })
             });
         }
 
-        console.log(ptArr)
+        // console.log(ptArr)
         var myBounds = new L.LatLngBounds(ptArr);
-        // This causes a problem for situations in which there is only one point
+        // This causes a problem for situations in which there is only one point 
         map.fitBounds(myBounds, { padding: [100, 100] });
     }
   render() {
