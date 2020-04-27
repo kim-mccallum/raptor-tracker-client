@@ -1,5 +1,7 @@
 import React from "react";
 import L from "leaflet";
+// Import your helper functions?
+
 
 class Map extends React.Component {
   
@@ -27,10 +29,21 @@ class Map extends React.Component {
         };
 
         L.control.layers(basemaps).addTo(map);
+        // TRY TO ADD ICON
+        var eagleIcon = L.icon({
+			iconUrl: require('../graphics/vulture.svg'),
+			iconSize: [50,55],
+            // iconAnchor: [32,74],
+            iconAnchor: [24,43],
+			popupAnchor: [0,-50]
+        });
+        
+
 
         // Add the recentData first
         this.props.recentData.forEach((obs) => {
-            let marker = new L.Marker([obs.location_lat, obs.location_long])
+            // let marker = new L.Marker([obs.location_lat, obs.location_long])
+            let marker = new L.Marker([obs.location_lat, obs.location_long], {icon: eagleIcon})
             .bindPopup(() => {
                 return `name: ${obs.individual_id} time: ${obs.time_stamp}`;
             })
@@ -41,17 +54,30 @@ class Map extends React.Component {
             })
         })
 
-        // array to hold individual bird data just for map bounds
-        let ptArr = [];
-        this.props.recentData.forEach((point) => {
-            let { location_lat, location_long } = point;
-            ptArr.push([location_lat, location_long]);
-        })
+        let testPoint = this.props.recentData[0]
+
+        // let testMarker = new L.Marker([testPoint.location_lat, testPoint.location_long], {icon: eagleIcon}).bindPopup(() => {
+        //         return `name: ${testPoint.individual_id} time: ${testPoint.time_stamp}`;
+        //     }).addTo(map);
+
+        // PUT THIS IN A FUNCTION TO BE "DRY" SO YOU CAN USE IT FOR BOTH DATASETS 
+        const fitMapToData = (observationData, paddingValue ) => {
+            let ptArr = [];
+            observationData.forEach((point) => {
+                let { location_lat, location_long } = point;
+                ptArr.push([location_lat, location_long]);
+            })
+            let myBounds = new L.LatLngBounds(ptArr);
+            map.fitBounds(myBounds, { padding: [paddingValue, paddingValue] });
+        }
+
+        fitMapToData(this.props.recentData, 100 )
+
         // Object with individual_id as keys and values as arrays of locations
         let obj = {};
         this.props.observations.forEach((point) => {
             let { location_lat, location_long, time_stamp, individual_id } = point;
-            ptArr.push([location_lat, location_long]);
+            // ptArr.push([location_lat, location_long]);
             if (!obj[individual_id]) {
                 obj[individual_id] = {
                 coords: [],
@@ -62,37 +88,36 @@ class Map extends React.Component {
             obj[individual_id].time_stamp.push([time_stamp]);
         });
         
-        // PUT THIS IN A FUNCTION TO BE DRY SO YOU CAN USE IT FOR BOTH DATASETS 
-        // function makePtArray(observations) - return an array of coordinates
-        const fitBounds = observationData => {
-            console.log('take the logic for creating an array of coordinates and then call fit bounds')
-        }
-
-        // Put this in a function renderPath() 
+        // Put this in a function renderPath() - Should I do this? 
         const renderPath = observationData => {
             console.log('I will take data, create an object and render a path on the map')
         }
+
         for (let [key, value] of Object.entries(obj)) {
-            var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-            let polyline = L.polyline(value.coords, { color: randomColor }).addTo(map);
+            // var randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+            // let polyline = L.polyline(value.coords, { color: randomColor }).addTo(map);
+            let polyline = L.polyline(value.coords, { color: '#2d1bf7' }).addTo(map);
 
             // console.log(obj)
             value.coords.forEach((coord, index) => {
-                let marker = new L.circleMarker(coord, {color:'#006600'})
+                let marker = new L.circleMarker(coord, {radius:5, color:'#5f6061'})
                 .bindPopup(() => {
                     return `name: ${key} time: ${value.time_stamp[index]}`;
                 })
                 .addTo(map);
             });
         }
-
-        // console.log(ptArr)
-        var myBounds = new L.LatLngBounds(ptArr);
-        // This causes a problem for situations in which there is only one point 
-        map.fitBounds(myBounds, { padding: [100, 100] });
+        // There is a problem with the single points. Fit bounds doesn't work right
+        if(this.props.observations.length > 5){
+            fitMapToData(this.props.observations,100)
+        }
+        else if(this.props.observations.length  < 5 && this.props.observations.length  > 0){
+            // fitMapToData(this.props.observations, 100000)
+            map.setView([this.props.observations[0].location_lat, this.props.observations[0].location_long], 12);
+        }
+        
     }
   render() {
-    //   console.log(this.props.observations)
     return <div style={{ width: "84vw", height: "100vh" }} id="map"></div>;
   }
 }
