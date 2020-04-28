@@ -106,9 +106,9 @@ class Map extends React.Component {
             let polyline = L.polyline(value.coords, { color: '#2d1bf7' }).addTo(map);
 
             value.coords.forEach((coord, index) => {
-                let marker = new L.circleMarker(coord, {radius:5, color:'#5f6061'})
+                let marker = new L.circleMarker(coord, {radius:5, color:'#2d1bf7'})
                 .bindPopup(() => {
-                    return `name: ${key} time: ${value.time_stamp[index]}`;
+                    return `time: ${value.time_stamp[index]}<br> name: ${key}`;
                 })
                 .addTo(map);
             });
