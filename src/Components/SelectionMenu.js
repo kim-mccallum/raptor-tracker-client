@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './SelectionMenu.css'
-import StudyInformation from './StudyInformation'
 
 export default class SelectionMenu extends Component {
     constructor(props) {
@@ -10,18 +9,9 @@ export default class SelectionMenu extends Component {
         this.state = {
             species: 'all',
             // probably don't need both tracking period and startDate/endDate
-            trackingPeriod: {
-               value: '',
-               touched: false
-            },
-            startDate: {
-                value: '',
-                touched: false
-            },
-            endDate: {
-               value: '',
-               touched: false
-            }
+            trackingPeriod:'',
+            startDate: '',
+            endDate: ''
         }
     }
     // Add handlers to get the data and put it into state
@@ -30,17 +20,18 @@ export default class SelectionMenu extends Component {
             // Week: start_date = today and end_date = start_date 7 days
             // Month: start_date = today and end_date = start_date 31 days
             // Year: start_date = today and end_date = start_date 365 days
+    rangeHandler = (e) => {
+        // do stuff
+        this.setState({
+            [e.target.name]:e.target.value
+        })
+    }
     
     render() {
+        console.log(this.state)
         return (
                 <div className="selection-menu">
-                    <div className="banner-overlay">
-                        <button 
-                            type="button" 
-                            className="close-btn" 
-                            aria-label="Close"
-                            onClick={this.props.onClick}
-                        >&times;</button>
+                    <div className="form-container">
                         <form className="selectDataForm">
                             <fieldset>
                                 <legend>Select map data</legend>
@@ -56,17 +47,21 @@ export default class SelectionMenu extends Component {
                                 <button type="button" value="Month">Month</button>
                                 <button type="button" value="Year">Year</button>
                                 <br/>
-                                <legend>Custom date range</legend>
-                                <label htmlFor="start-date">Start Date:</label>
-                                <input type="date" id="start-date" name="start-date" />
-                                <br/>
-                                <label htmlFor="end-date">End Date:</label>
-                                <input type="date" id="end-date" name="end-date" />
-                                <br/>
-                                <button type="submit" value="Submit">Map the data!</button>
+                                <fieldset id="date-slider">
+                                    <legend>Custom date range</legend>
+                                    <label htmlFor="startDate">Start Date:</label>
+                                    <input type="range" id="startDate" name="startDate" min="0" max="100" 
+                                        value={this.state.startDate} onChange={this.rangeHandler}
+                                    />
+                                    <br/>
+                                    <label htmlFor="endDate">End Date:</label>
+                                    <input type="range" id="endDate" name="endDate" min="0" max="100" 
+                                        value={this.state.endDate} onChange={this.rangeHandler}
+                                    />
+                                    <br/>
+                                </fieldset>
                             </fieldset>
                         </form>
-                        <StudyInformation />
                     </div>
                 </div>
             )

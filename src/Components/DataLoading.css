@@ -11,7 +11,7 @@
     cursor:pointer;
     padding: 8px;
     z-index: 1000;
-    border: 10px solid hotpink;
+    border: 10px solid rgb(38, 5, 114);
   }
 
 .data-loading h2{
