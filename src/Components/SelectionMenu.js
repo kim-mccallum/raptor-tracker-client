@@ -2,8 +2,14 @@ import React, { Component } from 'react'
 import moment from 'moment';
 import './SelectionMenu.css'
 
-// This should be an RFC
+// This should be an RFC???
 export default class SelectionMenu extends Component {
+    state = {
+        yearActive: true,
+        monthActive: false,
+        weekActive: false,
+    }
+    
     studyHandler = (e) => {
         // console.log('here is your value!', e.target.value)
         this.props.filterData({
