@@ -86,11 +86,12 @@ class Map extends React.Component {
         // Object with individual_id as keys and values as arrays of locations
         let obj = {};
         this.props.observations.forEach((point) => {
-            let { location_lat, location_long, time_stamp, individual_id } = point;
+            let { location_lat, location_long, time_stamp, individual_id, individual_taxon_canonical_name } = point;
             if (!obj[individual_id]) {
                 obj[individual_id] = {
                 coords: [],
                 time_stamp: [],
+                individual_taxon_canonical_name: individual_taxon_canonical_name
                 };
             }
             obj[individual_id].coords.push([location_lat, location_long]);
@@ -108,7 +109,7 @@ class Map extends React.Component {
             value.coords.forEach((coord, index) => {
                 let marker = new L.circleMarker(coord, {radius:5, color:'#2d1bf7'})
                 .bindPopup(() => {
-                    return `time: ${value.time_stamp[index]}<br> name: ${key}`;
+                    return `time: ${value.time_stamp[index]}<br> name: ${key} <br> species: ${value.individual_taxon_canonical_name}`;
                 })
                 .addTo(map);
             });

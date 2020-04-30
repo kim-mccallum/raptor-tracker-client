@@ -11,12 +11,13 @@ export default class App extends Component {
     state = {
       bannerVisible: true,
       dataLoading: true,
-      species: '',
+      study_id: '',
       individual_id: '',
       start_time: '',
       end_time: '', 
       recentData: [],
-      pathData: []
+      pathData: [],
+      studyData: []
     }
   
   // api request - simulated for now
@@ -98,6 +99,12 @@ export default class App extends Component {
         });
     });
   }
+
+  // callback prop to get the form data and pass it to handleDataFetch
+  filterData = (filterObj) => {
+    console.log(filterObj)
+  }
+
   onMarkerClick = (name) => {
     // do this later to handle the marker click
     this.setState({ individual_id: name })
@@ -130,7 +137,7 @@ export default class App extends Component {
     if(this.state.bannerVisible){
       return (
       <div className="App">
-      <Nav hideBanner={this.handleBanner}/>
+      <Nav hideBanner={this.handleBanner} filter={this.filterData}/>
       <div className="capsule">
         <WelcomeBanner hideBanner={this.handleBanner}/>
         <>

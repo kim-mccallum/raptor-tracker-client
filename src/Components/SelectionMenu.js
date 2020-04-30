@@ -7,7 +7,7 @@ export default class SelectionMenu extends Component {
         
         // Change these 
         this.state = {
-            species: 'all',
+            study: 'all',
             // probably don't need both tracking period and startDate/endDate
             trackingPeriod:'',
             startDate: '',
@@ -20,26 +20,31 @@ export default class SelectionMenu extends Component {
             // Week: start_date = today and end_date = start_date 7 days
             // Month: start_date = today and end_date = start_date 31 days
             // Year: start_date = today and end_date = start_date 365 days
-    rangeHandler = (e) => {
-        // do stuff
+
+    inputHandler = (e) => {
+        // set the state for the different form elements (dynamic keys)
+        // use an anonymous callback to pass the new state value to app.js
         this.setState({
             [e.target.name]:e.target.value
-        })
+        }, () => {
+            this.props.filter(this.state)
+        }
+        )   
     }
     
     render() {
-        console.log(this.state)
+        console.log(this.props)
         return (
                 <div className="selection-menu">
                     <div className="form-container">
                         <form className="selectDataForm">
                             <fieldset>
                                 <legend>Select map data</legend>
-                                <label htmlFor="species">Select species:</label><br/>
-                                <select id="species" name="species">
+                                <label htmlFor="study">Select species:</label><br/>
+                                <select id="study" name="study" onChange={this.inputHandler}>
                                     <option value="all">All</option>
-                                    <option value="golden-eagles">Golden eagles</option>
-                                    <option value="african-vultures">African vultures </option>                    
+                                    <option value="296675205">Golden eagles</option>
+                                    <option value="473993694">African vultures</option>                    
                                 </select>
                                 <br/>
                                 <legend>Tracking period</legend>
