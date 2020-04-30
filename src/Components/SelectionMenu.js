@@ -1,67 +1,61 @@
 import React, { Component } from 'react'
+import moment from 'moment';
 import './SelectionMenu.css'
 
+// This should be an RFC
 export default class SelectionMenu extends Component {
-    constructor(props) {
-        super(props)
-        
-        // Change these 
-        this.state = {
-            study: 'all',
-            // probably don't need both tracking period and startDate/endDate
-            trackingPeriod:'',
-            startDate: '',
-            endDate: ''
-        }
+    studyHandler = (e) => {
+        // console.log('here is your value!', e.target.value)
+        this.props.filterData({
+            study_id: e.target.value
+        })
     }
-    // Add handlers to get the data and put it into state
-        // The selected data will need to be passed back to App and to Map to render on the map
-    // Format dates as timestamps and get start_date and end_date to be formatted and ready for server request
-            // Week: start_date = today and end_date = start_date 7 days
-            // Month: start_date = today and end_date = start_date 31 days
-            // Year: start_date = today and end_date = start_date 365 days
+    weekHandler = () => {
+        this.props.filterData({
+            start_time: moment().subtract(1, 'week').format('x')
+        })
+    }
+    monthHandler = () => {
+        this.props.filterData({
+            start_time: moment().subtract(1, 'month').format('x')
+        })
+    }
+    yearHandler = () => {
+        this.props.filterData({
+            start_time: moment().subtract(1, 'year').format('x')
+        })
+    }
 
-    inputHandler = (e) => {
-        // set the state for the different form elements (dynamic keys)
-        // use an anonymous callback to pass the new state value to app.js
-        this.setState({
-            [e.target.name]:e.target.value
-        }, () => {
-            this.props.filter(this.state)
-        }
-        )   
-    }
-    
     render() {
-        console.log(this.props)
         return (
                 <div className="selection-menu">
                     <div className="form-container">
                         <form className="selectDataForm">
                             <fieldset>
                                 <legend>Select map data</legend>
-                                <label htmlFor="study">Select species:</label><br/>
-                                <select id="study" name="study" onChange={this.inputHandler}>
-                                    <option value="all">All</option>
+                                <label htmlFor="study_id">Select species:</label><br/>
+                                <select id="study_id" onChange={this.studyHandler}>
+                                    <option value="">All</option>
                                     <option value="296675205">Golden eagles</option>
                                     <option value="473993694">African vultures</option>                    
                                 </select>
                                 <br/>
                                 <legend>Tracking period</legend>
-                                <button type="button" value="Week">Week</button>
-                                <button type="button" value="Month">Month</button>
-                                <button type="button" value="Year">Year</button>
+                                {/* FIGURE OUT HOW TO ADD A CLASS TO STYLE THE ACTIVE BUTTON SO USERS KNOW WHAT IS IN STATE */}
+                                <button type="button" onClick={this.weekHandler} >Week</button>
+                                <button type="button" onClick={this.monthHandler} >Month</button>
+                                <button type="button" onClick={this.yearHandler} >Year</button>
                                 <br/>
                                 <fieldset id="date-slider">
                                     <legend>Custom date range</legend>
                                     <label htmlFor="startDate">Start Date:</label>
                                     <input type="range" id="startDate" name="startDate" min="0" max="100" 
-                                        value={this.state.startDate} onChange={this.rangeHandler}
+                                        value='0' onChange={this.rangeHandler}
                                     />
                                     <br/>
                                     <label htmlFor="endDate">End Date:</label>
                                     <input type="range" id="endDate" name="endDate" min="0" max="100" 
-                                        value={this.state.endDate} onChange={this.rangeHandler}
+                                        value='0' onChange={this.rangeHandler}
                                     />
                                     <br/>
                                 </fieldset>

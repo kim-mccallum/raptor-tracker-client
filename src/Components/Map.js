@@ -20,7 +20,7 @@ class Map extends React.Component {
         // Satellite/Aerial imagery
         const Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-            maxZoom: 16
+            maxZoom: 12
         });
 
         const basemaps = {
@@ -55,15 +55,18 @@ class Map extends React.Component {
             })
         })
 
-        let testPoint = {
-            "id": 17,
-            "individual_id": "GE412",
-            "time_stamp": "1530212400000",
-            "location_long": -110.53551661995617,
-            "location_lat": 39.531690217115106,
-            "heading": "0",
-            "ground_speed": "0"
-        }
+        // let testPoint =  {
+        //     "id": 30,
+        //     "individual_id": "ANIS1",
+        //     "time_stamp": "2020-01-07T04:00:00.000Z",
+        //     "location_long": -113.15656558439251,
+        //     "location_lat": 37.573475099796305,
+        //     "heading": "0",
+        //     "ground_speed": "0",
+        //     "individual_local_identifier": "ANIS1",
+        //     "individual_taxon_canonical_name": "Aquila chrysaetos",
+        //     "study_id": "296675205"
+        // }
         // let testPoint = this.props.recentData[0]
 
         // let testMarker = new L.Marker([testPoint.location_lat, testPoint.location_long], {icon: eagleIcon}).bindPopup(() => {
