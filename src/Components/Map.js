@@ -53,6 +53,9 @@ class Map extends React.Component {
             marker.on("click", (e) => {
                 this.props.markerHandler(obs.individual_id)
             })
+            .on('mouseover', (e) => {
+                marker.openPopup();
+            })
         })
 
         // let testPoint =  {
@@ -111,10 +114,14 @@ class Map extends React.Component {
 
             value.coords.forEach((coord, index) => {
                 let marker = new L.circleMarker(coord, {radius:5, color:'#2d1bf7'})
-                .bindPopup(() => {
-                    return `time: ${value.time_stamp[index]}<br> name: ${key} <br> species: ${value.individual_taxon_canonical_name}`;
-                })
-                .addTo(map);
+                    .bindPopup(() => {
+                        return `time: ${value.time_stamp[index]}<br> name: ${key} <br> species: ${value.individual_taxon_canonical_name}`;
+                    })
+                    .addTo(map)
+                    // make it so it's just the timestamp
+                    .on('mouseover', (e) => {
+                        marker.openPopup();
+                    })
             });
         }
         // There is a problem with the single points. Fit bounds doesn't work right
