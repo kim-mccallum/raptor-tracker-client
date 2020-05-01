@@ -1,4 +1,6 @@
 export default {
-    API_ENDPOINT: `http://localhost:8000/api`,
-    // API_ENDPOINT: `https://shielded-woodland-46596.herokuapp.com/api`    
-}
+  API_ENDPOINT:
+    process.env.NODE_ENV === "production"
+      ? `https://shielded-woodland-46596.herokuapp.com/api`
+      : `http://localhost:8000/api`,
+};
