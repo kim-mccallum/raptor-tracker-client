@@ -8,6 +8,7 @@ import moment from "moment";
 // import STORE from './dummy-data';
 import "./App.css";
 
+// FIX THE ISSUE WITH THE DOUBLE SETSTATE ON LOAD
 export default class App extends Component {
   state = {
     bannerVisible: true,
@@ -16,45 +17,61 @@ export default class App extends Component {
     // This was redundant with the state in SelectionMenu so I refactored to the form to not have state
     study_id: "",
     individual_id: "",
-    start_time: moment().subtract(1, "year").format("x"),
-    end_time: moment().format("x"),
+    // Take out the date ''2020-05-01' once DB updating is implemented
+    start_time: moment("2020-05-01").subtract(1, "year").format("x"),
+    end_time: moment("2020-05-01").format("x"),
     // potentially deal with distinguishing between no data and data not yet fetched - 'loading'?
     recentData: [],
+    firstData: [],
     pathData: [],
     isRaptorClicked: false,
   };
 
   componentDidMount() {
-    const url = `${config.API_ENDPOINT}/observations/last`;
+    const urls = [
+      `${config.API_ENDPOINT}/observations/last`,
+      `${config.API_ENDPOINT}/observations/first`,
+    ];
 
     // this sets state and runs the callback wiht the new state
     this.setState({ dataLoading: true }, () => {
-      fetch(url)
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Something went wrong, please try again later.");
-          }
-          return res;
+      Promise.all(
+        urls.map((url) => {
+          return fetch(url)
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(
+                  "Something went wrong, please try again later."
+                );
+              }
+              return res;
+            })
+            .then((res) => res.json())
+            .then((data) => {
+              return data;
+            })
+            .catch((err) => {
+              this.setState({
+                error: err.message,
+              });
+            });
         })
-        .then((res) => res.json())
-        .then((data) => {
+      ).then((dataSets) => {
+        dataSets.forEach((data) => {
           data.sort((a, b) => {
             return (
               new Date(a.time_stamp).getTime() -
               new Date(b.time_stamp).getTime()
             );
           });
-          this.setState({
-            recentData: data,
-            error: null,
-            dataLoading: false,
-          });
-        })
-        .catch((err) => {
-          this.setState({
-            error: err.message,
-          });
         });
+        this.setState({
+          recentData: dataSets[0],
+          firstData: dataSets[1],
+          error: null,
+          dataLoading: false,
+        });
+      });
     });
   }
 
@@ -138,7 +155,7 @@ export default class App extends Component {
       bannerVisible: false,
     });
   };
-  
+
   deactivateIsRaptorClicked = () => {
     this.setState({
       isRaptorClicked: false,
@@ -152,6 +169,7 @@ export default class App extends Component {
   };
 
   render() {
+    // console.log(this.state.recentData, this.state.firstData);
     let map;
     if (!this.state.dataLoading) {
       map = (
@@ -167,10 +185,11 @@ export default class App extends Component {
     return (
       <div className="App">
         <Nav
-          hideBanner={this.handleBanner}
           filterData={this.filterData}
           isRaptorClicked={this.state.isRaptorClicked}
           raptorId={this.state.individual_id}
+          firstData={this.state.firstData}
+          recentData={this.state.recentData}
           deactivateIsRaptorClicked={this.deactivateIsRaptorClicked}
           activateIsRaptorClicked={this.activateIsRaptorClicked}
         />

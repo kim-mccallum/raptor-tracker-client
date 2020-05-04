@@ -1,13 +1,14 @@
 .btn {
-    border: none;
-    /* outline: none; */
-    padding: 4px 10px;
-    background-color: #f1f1f1;
-    cursor: pointer;
-  }
-  
-  /* Style the active class (and buttons on mouse-over) */
-  .active, .btn:hover {
-    background-color: #666;
-    color: white;
-  }
+  border: none;
+  /* outline: none; */
+  /* padding: 4px 8px; */
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+/* Style the active class (and buttons on mouse-over) */
+.active,
+.btn:hover {
+  background-color: #666;
+  color: white;
+}
