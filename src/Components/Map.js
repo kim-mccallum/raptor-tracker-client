@@ -1,5 +1,6 @@
 import React from "react";
 import L from "leaflet";
+import moment from "moment";
 
 class Map extends React.Component {
   componentDidMount() {
@@ -34,6 +35,7 @@ class Map extends React.Component {
     };
 
     L.control.layers(basemaps).addTo(map);
+
     var eagleIcon = L.icon({
       // iconUrl: require('../graphics/vulture.svg'),
       iconUrl: require("../graphics/eagle-1.svg"),
@@ -48,7 +50,11 @@ class Map extends React.Component {
         icon: eagleIcon,
       })
         .bindPopup(() => {
-          return `Name: ${obs.individual_id}<br>Species: ${obs.individual_taxon_canonical_name}<br>Last seen: ${obs.time_stamp}<br> Click to view path`;
+          return `Name: ${obs.individual_id}<br>Species: ${
+            obs.individual_taxon_canonical_name
+          }<br>Last seen: ${moment(obs.time_stamp).format(
+            "LLL"
+          )}<br> Click to view path`;
         })
         .addTo(map);
 
@@ -116,11 +122,11 @@ class Map extends React.Component {
     });
 
     // Put this in a function renderPath() - Should I do this?
-    const renderPath = (observationData) => {
-      console.log(
-        "I will take data, create an object and render a path on the map"
-      );
-    };
+    // const renderPath = (observationData) => {
+    //   console.log(
+    //     "I will take data, create an object and render a path on the map"
+    //   );
+    // };
 
     for (let [key, value] of Object.entries(obj)) {
       let polyline = L.polyline(value.coords, { color: "#2d1bf7" }).addTo(map);
@@ -128,7 +134,7 @@ class Map extends React.Component {
       value.coords.forEach((coord, index) => {
         let marker = new L.circleMarker(coord, { radius: 5, color: "#2d1bf7" })
           .bindPopup(() => {
-            return `time: ${value.time_stamp[index]}`;
+            return `${key} ${moment(value.time_stamp[index][0]).format("LLL")}`;
           })
           .addTo(map)
           // make it so it's just the timestamp

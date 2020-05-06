@@ -25,7 +25,15 @@ export default class Nav extends Component {
           <ul>
             <li>
               <a href="https://hawkwatch.org/our-work/tracking" target="blank">
-                Learn more
+                About tracking
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://hawkwatch.org/our-work/vanishing-vultures"
+                target="blank"
+              >
+                Vanishing vultures
               </a>
             </li>
             <li>

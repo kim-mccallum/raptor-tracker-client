@@ -5,10 +5,8 @@ import Map from "./Components/Map";
 import DataLoading from "./Components/DataLoading";
 import WelcomeBanner from "./Components/WelcomeBanner";
 import moment from "moment";
-// import STORE from './dummy-data';
 import "./App.css";
 
-// FIX THE ISSUE WITH THE DOUBLE SETSTATE ON LOAD
 export default class App extends Component {
   state = {
     bannerVisible: true,
@@ -24,6 +22,7 @@ export default class App extends Component {
     recentData: [],
     firstData: [],
     pathData: [],
+    // Remove? This was only added to have something to style the tracking period buttons
     isRaptorClicked: false,
   };
 
@@ -33,7 +32,6 @@ export default class App extends Component {
       `${config.API_ENDPOINT}/observations/first`,
     ];
 
-    // this sets state and runs the callback wiht the new state
     this.setState({ dataLoading: true }, () => {
       Promise.all(
         urls.map((url) => {
@@ -106,7 +104,6 @@ export default class App extends Component {
         .then((data) => {
           // console.log(`got the data: ${data}`)
           data.sort((a, b) => {
-            // Check the order here - This is not right with new date format!
             return (
               new Date(a.time_stamp).getTime() -
               new Date(b.time_stamp).getTime()
@@ -114,7 +111,6 @@ export default class App extends Component {
           });
           this.setState(
             {
-              // change later to pathData
               pathData: data,
               error: null,
               dataLoading: false,
@@ -169,7 +165,7 @@ export default class App extends Component {
   };
 
   render() {
-    // console.log(this.state.recentData, this.state.firstData);
+    //
     let map;
     if (!this.state.dataLoading) {
       map = (

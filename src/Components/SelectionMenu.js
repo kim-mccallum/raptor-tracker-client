@@ -97,7 +97,7 @@ export default class SelectionMenu extends Component {
           <form className="selectDataForm">
             <fieldset>
               <legend>Filter data</legend>
-              <label htmlFor="study_id">Select species:</label>
+              <label htmlFor="study_id">Select study:</label>
               <br />
               <select id="study_id" onChange={this.studyHandler}>
                 <option value="">All</option>
@@ -132,21 +132,21 @@ export default class SelectionMenu extends Component {
               </button>
               <br />
               {/* Put this in another component DateSlider that is rendered if an All button is clicked */}
-              {/* <fieldset id="date-slider">
-                <legend>Date range</legend>
-                <label htmlFor="date-range">Select Date Range:</label>
+              <fieldset id="date-slider">
+                <legend>Custom range</legend>
+                <label htmlFor="date-range">Select Dates:</label>
                 <Range
                   id="date-range"
                   name="date-range"
                   min={minDate}
                   max={maxDate}
                   tipFormatter={(value) => {
-                    const viewValue = moment(value).format("LLLL");
+                    const viewValue = moment(value).format("L");
                     return `${viewValue}`;
                   }}
-                  onChange={this.rangeHandler}
+                  onAfterChange={this.rangeHandler}
                 />
-              </fieldset> */}
+              </fieldset>
             </fieldset>
             {raptorName}
           </form>
