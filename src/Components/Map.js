@@ -144,13 +144,17 @@ class Map extends React.Component {
       });
     }
     // There is a problem with the single points. Fit bounds doesn't work right
-    if (this.props.observations.length > 5) {
+    if (this.props.observations.length > 10) {
       fitMapToData(this.props.observations, 100);
+    } else if (
+      this.props.observations.length > 5 &&
+      this.props.observations.length < 10
+    ) {
+      fitMapToData(this.props.observations, 200);
     } else if (
       this.props.observations.length < 5 &&
       this.props.observations.length > 0
     ) {
-      // fitMapToData(this.props.observations, 100000)
       map.setView(
         [
           this.props.observations[0].location_lat,

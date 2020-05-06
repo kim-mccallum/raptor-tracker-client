@@ -16,14 +16,12 @@ export default class App extends Component {
     study_id: "",
     individual_id: "",
     // Take out the date ''2020-05-01' once DB updating is implemented
-    start_time: moment("2020-05-01").subtract(1, "year").format("x"),
-    end_time: moment("2020-05-01").format("x"),
+    start_time: moment().subtract(1, "year").format("x"),
+    end_time: moment().format("x"),
     // potentially deal with distinguishing between no data and data not yet fetched - 'loading'?
     recentData: [],
     firstData: [],
     pathData: [],
-    // Remove? This was only added to have something to style the tracking period buttons
-    isRaptorClicked: false,
   };
 
   componentDidMount() {
@@ -127,7 +125,7 @@ export default class App extends Component {
         });
     });
   };
-  // Change the name to updateFilters because we have chaanged the meaning of this function
+
   // callback prop to get the form data and pass it to handleDataFetch
   filterData = (updates) => {
     this.setState(updates, () => {
@@ -152,18 +150,6 @@ export default class App extends Component {
     });
   };
 
-  deactivateIsRaptorClicked = () => {
-    this.setState({
-      isRaptorClicked: false,
-    });
-  };
-
-  activateIsRaptorClicked = () => {
-    this.setState({
-      isRaptorClicked: true,
-    });
-  };
-
   render() {
     //
     let map;
@@ -182,12 +168,9 @@ export default class App extends Component {
       <div className="App">
         <Nav
           filterData={this.filterData}
-          isRaptorClicked={this.state.isRaptorClicked}
           raptorId={this.state.individual_id}
           firstData={this.state.firstData}
           recentData={this.state.recentData}
-          deactivateIsRaptorClicked={this.deactivateIsRaptorClicked}
-          activateIsRaptorClicked={this.activateIsRaptorClicked}
         />
         <div className="capsule">
           {this.state.bannerVisible ? (

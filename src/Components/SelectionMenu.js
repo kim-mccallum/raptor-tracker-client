@@ -10,7 +10,7 @@ const Range = createSliderWithTooltip(Slider.Range);
 // FIX THE ACTIVATE/DEACTIVATE RAPTOR CLICK
 export default class SelectionMenu extends Component {
   state = {
-    yearActive: true,
+    yearActive: false,
     monthActive: false,
     weekActive: false,
     min: this.props.firstData[0],
@@ -34,36 +34,33 @@ export default class SelectionMenu extends Component {
   weekHandler = () => {
     this.props.filterData({
       // Take out the date ''2020-05-01' once DB updating is implemented
-      start_time: moment("2020-05-01").subtract(1, "week").format("x"),
+      start_time: moment().subtract(1, "week").format("x"),
     });
     this.setState({
       yearActive: false,
       monthActive: false,
       weekActive: true,
     });
-    this.props.deactivateIsRaptorClicked();
   };
   monthHandler = () => {
     this.props.filterData({
-      start_time: moment("2020-05-01").subtract(1, "month").format("x"),
+      start_time: moment().subtract(1, "month").format("x"),
     });
     this.setState({
       yearActive: false,
       monthActive: true,
       weekActive: false,
     });
-    this.props.deactivateIsRaptorClicked();
   };
   yearHandler = () => {
     this.props.filterData({
-      start_time: moment("2020-05-01").subtract(1, "year").format("x"),
+      start_time: moment().subtract(1, "year").format("x"),
     });
     this.setState({
       yearActive: true,
       monthActive: false,
       weekActive: false,
     });
-    this.props.activateIsRaptorClicked();
   };
   // Get the start and end date from the range picker
   rangeHandler = (e) => {
@@ -125,14 +122,19 @@ export default class SelectionMenu extends Component {
                 type="button"
                 onClick={this.yearHandler}
                 className={`btn ${
-                  this.props.isRaptorClicked ? "active" : null
+                  this.state.yearActive ||
+                  (this.props.raptorId !== "" &&
+                    !this.state.monthActive &&
+                    !this.state.weekActive)
+                    ? "active"
+                    : ""
                 }`}
               >
                 Year
               </button>
               <br />
               {/* Put this in another component DateSlider that is rendered if an All button is clicked */}
-              <fieldset id="date-slider">
+              {/* <fieldset id="date-slider">
                 <legend>Custom range</legend>
                 <label htmlFor="date-range">Select Dates:</label>
                 <Range
@@ -146,7 +148,7 @@ export default class SelectionMenu extends Component {
                   }}
                   onAfterChange={this.rangeHandler}
                 />
-              </fieldset>
+              </fieldset> */}
             </fieldset>
             {raptorName}
           </form>

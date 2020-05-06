@@ -4,7 +4,7 @@ import "./Nav.css";
 
 export default class Nav extends Component {
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <>
         <nav className="app-nav">
@@ -15,12 +15,9 @@ export default class Nav extends Component {
           />
           <SelectionMenu
             filterData={this.props.filterData}
-            isRaptorClicked={this.props.isRaptorClicked}
             raptorId={this.props.raptorId}
             firstData={this.props.firstData}
             recentData={this.props.recentData}
-            activateIsRaptorClicked={this.props.activateIsRaptorClicked}
-            deactivateIsRaptorClicked={this.props.deactivateIsRaptorClicked}
           />
           <ul>
             <li>
