@@ -88,7 +88,6 @@ export default class App extends Component {
 
     const url = `${baseUrl}${params}`;
 
-    // this.setState({ dataLoading: true }, () => {
     fetch(url)
       .then((res) => {
         if (!res.ok) {
@@ -115,7 +114,6 @@ export default class App extends Component {
           error: err.message,
         });
       });
-    // });
   };
 
   // Get the form data and pass it to handleDataFetch
@@ -141,19 +139,6 @@ export default class App extends Component {
   };
 
   render() {
-    //CHANGE THIS - Conditionally rendering the map based on data loading is disruptive
-    // let map;
-    // if (!this.state.dataLoading) {
-    //   map = (
-    //     <div className="map-container">
-    //       <Map
-    //         observations={this.state.pathData}
-    //         recentData={this.state.recentData}
-    //         markerHandler={this.onMarkerClick}
-    //       />
-    //     </div>
-    //   );
-    // }
     return (
       <div className="App">
         <Nav

@@ -151,7 +151,6 @@ class Map extends React.Component {
     }
   }
   render() {
-    // console.log(this.props);
     return <div style={{ width: "84vw", height: "100vh" }} id="map"></div>;
   }
 }

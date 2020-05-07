@@ -34,11 +34,6 @@ export default class Nav extends Component {
               </a>
             </li>
             <li>
-              <a href="https://hawkwatch.org/participate" target="blank">
-                Get involved
-              </a>
-            </li>
-            <li>
               <a
                 href="https://hawkwatch.org/component/civicrm/?task=civicrm/contribute/transact&reset=1&id=5"
                 target="blank"
