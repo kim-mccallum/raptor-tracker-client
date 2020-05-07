@@ -30,7 +30,7 @@ export default class SelectionMenu extends Component {
     // Pass the new stuff to filterData
     this.props.filterData({
       // Take out the date ''2020-05-01' once DB updating is implemented
-      start_time: moment().subtract(1, e.target.name).format("x"),
+      start_time: moment("2020-05-01").subtract(1, e.target.name).format("x"),
     });
   };
 

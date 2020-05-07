@@ -15,9 +15,9 @@ export default class App extends Component {
     // This was redundant with the state in SelectionMenu so I refactored to the form to not have state
     study_id: "",
     individual_id: "",
-    // Take out the date ''2020-05-01' once DB updating is implemented
-    start_time: moment().subtract(1, "month").format("x"),
-    end_time: moment().format("x"),
+    // Take out the date '2020-05-01' once DB updating is implemented
+    start_time: moment("2020-05-01").subtract(1, "month").format("x"),
+    end_time: moment("2020-05-01").format("x"),
     // potentially deal with distinguishing between no data and data not yet fetched - 'loading'?
     recentData: [],
     firstData: [],
