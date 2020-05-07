@@ -16,7 +16,7 @@ export default class App extends Component {
     study_id: "",
     individual_id: "",
     // Take out the date ''2020-05-01' once DB updating is implemented
-    start_time: moment().subtract(1, "year").format("x"),
+    start_time: moment().subtract(1, "month").format("x"),
     end_time: moment().format("x"),
     // potentially deal with distinguishing between no data and data not yet fetched - 'loading'?
     recentData: [],

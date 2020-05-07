@@ -10,6 +10,7 @@ const Range = createSliderWithTooltip(Slider.Range);
 // FIX THE ACTIVATE/DEACTIVATE RAPTOR CLICK
 export default class SelectionMenu extends Component {
   state = {
+    activeButton: "month",
     yearActive: false,
     monthActive: false,
     weekActive: false,
@@ -17,13 +18,21 @@ export default class SelectionMenu extends Component {
     max: 100,
   };
 
-  componentDidMount() {
-    // get the first/last dates and update state
-    // this.setState({
-    //     min: minDateObj,
-    //     max: maxDateObj
-    // })
-  }
+  activeDateButtonHandler = (e) => {
+    // get the period from the e and set that to activeButton
+    this.setState({
+      activeButton: e.target.name,
+    });
+
+    if (e.target.name === "specificDates") {
+      return;
+    }
+    // Pass the new stuff to filterData
+    this.props.filterData({
+      // Take out the date ''2020-05-01' once DB updating is implemented
+      start_time: moment().subtract(1, e.target.name).format("x"),
+    });
+  };
 
   studyHandler = (e) => {
     this.props.filterData({
@@ -31,41 +40,9 @@ export default class SelectionMenu extends Component {
       individual_id: "",
     });
   };
-  weekHandler = () => {
-    this.props.filterData({
-      // Take out the date ''2020-05-01' once DB updating is implemented
-      start_time: moment().subtract(1, "week").format("x"),
-    });
-    this.setState({
-      yearActive: false,
-      monthActive: false,
-      weekActive: true,
-    });
-  };
-  monthHandler = () => {
-    this.props.filterData({
-      start_time: moment().subtract(1, "month").format("x"),
-    });
-    this.setState({
-      yearActive: false,
-      monthActive: true,
-      weekActive: false,
-    });
-  };
-  yearHandler = () => {
-    this.props.filterData({
-      start_time: moment().subtract(1, "year").format("x"),
-    });
-    this.setState({
-      yearActive: true,
-      monthActive: false,
-      weekActive: false,
-    });
-  };
-  // Get the start and end date from the range picker
+
+  // Get the start and end date from the range picker - Keep this as it's different and unique
   rangeHandler = (e) => {
-    // Maybe get the most recent date from the recentData in App.js state and use this as Max in the form
-    // If you do this, make another call to the get the First date in the database
     console.log(e);
 
     this.props.filterData({
@@ -105,36 +82,55 @@ export default class SelectionMenu extends Component {
               <legend>Tracking period</legend>
               {/* FIGURE OUT HOW TO ADD A CLASS TO STYLE THE ACTIVE BUTTON SO USERS KNOW WHAT IS IN STATE */}
               <button
+                name="week"
                 type="button"
-                onClick={this.weekHandler}
-                className={`btn ${this.state.weekActive ? "active" : ""}`}
+                onClick={this.activeDateButtonHandler}
+                className={`btn ${
+                  this.state.activeButton === "week" ? "active" : ""
+                }`}
               >
                 Week
               </button>
               <button
+                name="month"
                 type="button"
-                onClick={this.monthHandler}
-                className={`btn ${this.state.monthActive ? "active" : ""}`}
+                onClick={this.activeDateButtonHandler}
+                className={`btn ${
+                  this.state.activeButton === "month" ? "active" : ""
+                }`}
               >
                 Month
               </button>
               <button
+                name="year"
                 type="button"
-                onClick={this.yearHandler}
+                onClick={this.activeDateButtonHandler}
                 className={`btn ${
-                  this.state.yearActive ||
-                  (this.props.raptorId !== "" &&
-                    !this.state.monthActive &&
-                    !this.state.weekActive)
-                    ? "active"
-                    : ""
+                  this.state.activeButton === "year" ? "active" : ""
                 }`}
               >
                 Year
               </button>
+              <button
+                name="specificDates"
+                type="button"
+                onClick={this.activeDateButtonHandler}
+                className={`btn ${
+                  this.state.activeButton === "specificDates" ? "active" : ""
+                }`}
+              >
+                Specific Dates
+              </button>
               <br />
               {/* Put this in another component DateSlider that is rendered if an All button is clicked */}
-              {/* <fieldset id="date-slider">
+              <fieldset
+                id="date-slider"
+                className={
+                  this.state.activeButton === "specificDates"
+                    ? "active"
+                    : "hidden"
+                }
+              >
                 <legend>Custom range</legend>
                 <label htmlFor="date-range">Select Dates:</label>
                 <Range
@@ -148,7 +144,7 @@ export default class SelectionMenu extends Component {
                   }}
                   onAfterChange={this.rangeHandler}
                 />
-              </fieldset> */}
+              </fieldset>
             </fieldset>
             {raptorName}
           </form>

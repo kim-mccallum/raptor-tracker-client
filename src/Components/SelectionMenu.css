@@ -12,3 +12,7 @@
   background-color: #666;
   color: white;
 }
+
+.hidden {
+  display: none;
+}

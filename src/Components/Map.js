@@ -44,8 +44,8 @@ class Map extends React.Component {
       popupAnchor: [0, -50],
     });
 
-    // Add the recentData on load
     this.props.recentData.forEach((obs) => {
+      // if their date is in the last year, give a certain effect and if it's old do something else
       let marker = new L.Marker([obs.location_lat, obs.location_long], {
         icon: eagleIcon,
       })
@@ -69,24 +69,6 @@ class Map extends React.Component {
         this.closePopup();
       });
     });
-
-    // let testPoint =  {
-    //     "id": 30,
-    //     "individual_id": "ANIS1",
-    //     "time_stamp": "2020-01-07T04:00:00.000Z",
-    //     "location_long": -113.15656558439251,
-    //     "location_lat": 37.573475099796305,
-    //     "heading": "0",
-    //     "ground_speed": "0",
-    //     "individual_local_identifier": "ANIS1",
-    //     "individual_taxon_canonical_name": "Aquila chrysaetos",
-    //     "study_id": "296675205"
-    // }
-    // let testPoint = this.props.recentData[0]
-
-    // let testMarker = new L.Marker([testPoint.location_lat, testPoint.location_long], {icon: eagleIcon}).bindPopup(() => {
-    //         return `name: ${testPoint.individual_id} time: ${testPoint.time_stamp}`;
-    //     }).addTo(map);
 
     const fitMapToData = (observationData, paddingValue) => {
       let ptArr = [];
@@ -145,7 +127,7 @@ class Map extends React.Component {
     }
     // There is a problem with the single points. Fit bounds doesn't work right
     if (this.props.observations.length > 10) {
-      fitMapToData(this.props.observations, 100);
+      fitMapToData(this.props.observations, 150);
     } else if (
       this.props.observations.length > 5 &&
       this.props.observations.length < 10
@@ -165,6 +147,7 @@ class Map extends React.Component {
     }
   }
   render() {
+    console.log(this.props);
     return <div style={{ width: "84vw", height: "100vh" }} id="map"></div>;
   }
 }
