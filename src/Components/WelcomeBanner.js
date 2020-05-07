@@ -16,8 +16,8 @@ export default function WelcomeBanner(props) {
         <h1>Welcome to the Raptor Tracker</h1>
         <p>
           View movements and explore behavior patterns of raptors GPS tagged by
-          Hawkwatch International. Use the menu on the left to select by species
-          and date.
+          Hawkwatch International. Use the menu on the left to select by study
+          and observation date.
         </p>
         <p>
           Click on the map to get started! Use the menu on the left to select

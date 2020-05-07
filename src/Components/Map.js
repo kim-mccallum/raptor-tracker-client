@@ -3,9 +3,18 @@ import L from "leaflet";
 import moment from "moment";
 
 class Map extends React.Component {
+  eagleIcon = L.icon({
+    // iconUrl: require('../graphics/vulture.svg'),
+    iconUrl: require("../graphics/eagle-1.svg"),
+    iconSize: [50, 55],
+    iconAnchor: [28, 43],
+    popupAnchor: [0, -50],
+  });
+
+  // BREAK THIS UP INTO COMPONENTDIDUPDATE AS WELL AS MAYBE HELPER METHODS
+  // jUST CREATE THE MAP
   componentDidMount() {
-    //   let marker;
-    let map = L.map("map", {
+    this.map = L.map("map", {
       zoomControl: false,
       preferCanvas: true,
     });
@@ -17,7 +26,7 @@ class Map extends React.Component {
           "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC",
         maxZoom: 16,
       }
-    ).addTo(map);
+    ).addTo(this.map);
 
     // Satellite/Aerial imagery
     const Esri_WorldImagery = L.tileLayer(
@@ -28,26 +37,23 @@ class Map extends React.Component {
         maxZoom: 12,
       }
     );
-
+    // Set up layer controls
     const basemaps = {
       "National Geographic": natGeo,
       "World Imagery": Esri_WorldImagery,
     };
 
-    L.control.layers(basemaps).addTo(map);
+    L.control.layers(basemaps).addTo(this.map);
 
-    var eagleIcon = L.icon({
-      // iconUrl: require('../graphics/vulture.svg'),
-      iconUrl: require("../graphics/eagle-1.svg"),
-      iconSize: [50, 55],
-      iconAnchor: [28, 43],
-      popupAnchor: [0, -50],
-    });
+    // Try to make a layer so you can clear
+    this.layer = L.layerGroup().addTo(this.map);
+  }
 
+  componentDidUpdate(prevProps, prevState) {
     this.props.recentData.forEach((obs) => {
-      // if their date is in the last year, give a certain effect and if it's old do something else
+      // Potentially add style for active and inactive birds: If last date is in the last year, give a certain effect and if it's old do something else
       let marker = new L.Marker([obs.location_lat, obs.location_long], {
-        icon: eagleIcon,
+        icon: this.eagleIcon,
       })
         .bindPopup(() => {
           return `Name: ${obs.individual_id}<br>Species: ${
@@ -56,7 +62,7 @@ class Map extends React.Component {
             "LLL"
           )}<br> Click to view path`;
         })
-        .addTo(map);
+        .addTo(this.map);
 
       marker.on("click", (e) => {
         this.props.markerHandler(obs.individual_id);
@@ -77,11 +83,13 @@ class Map extends React.Component {
         ptArr.push([location_lat, location_long]);
       });
       let myBounds = new L.LatLngBounds(ptArr);
-      map.fitBounds(myBounds, { padding: [paddingValue, paddingValue] });
+      this.map.fitBounds(myBounds, { padding: [paddingValue, paddingValue] });
     };
 
     fitMapToData(this.props.recentData, 100);
 
+    // Try to clear the old data
+    this.layer.clearLayers();
     // Object with individual_id as keys and values as arrays of locations
     let obj = {};
     this.props.observations.forEach((point) => {
@@ -103,29 +111,25 @@ class Map extends React.Component {
       obj[individual_id].time_stamp.push([time_stamp]);
     });
 
-    // Put this in a function renderPath() - Should I do this?
-    // const renderPath = (observationData) => {
-    //   console.log(
-    //     "I will take data, create an object and render a path on the map"
-    //   );
-    // };
-
     for (let [key, value] of Object.entries(obj)) {
-      let polyline = L.polyline(value.coords, { color: "#2d1bf7" }).addTo(map);
+      let polyline = L.polyline(value.coords, { color: "#2d1bf7" }).addTo(
+        // changed from this.map
+        this.layer
+      );
 
       value.coords.forEach((coord, index) => {
         let marker = new L.circleMarker(coord, { radius: 5, color: "#2d1bf7" })
           .bindPopup(() => {
             return `${key} ${moment(value.time_stamp[index][0]).format("LLL")}`;
           })
-          .addTo(map)
-          // make it so it's just the timestamp
+          .addTo(this.layer)
+          // .addTo(this.map)
           .on("mouseover", (e) => {
             marker.openPopup();
           });
       });
     }
-    // There is a problem with the single points. Fit bounds doesn't work right
+    // Adjust fitBounds so that zoom is appropriate for few or many observations
     if (this.props.observations.length > 10) {
       fitMapToData(this.props.observations, 150);
     } else if (
@@ -137,7 +141,7 @@ class Map extends React.Component {
       this.props.observations.length < 5 &&
       this.props.observations.length > 0
     ) {
-      map.setView(
+      this.map.setView(
         [
           this.props.observations[0].location_lat,
           this.props.observations[0].location_long,
@@ -147,7 +151,7 @@ class Map extends React.Component {
     }
   }
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     return <div style={{ width: "84vw", height: "100vh" }} id="map"></div>;
   }
 }

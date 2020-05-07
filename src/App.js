@@ -11,8 +11,7 @@ export default class App extends Component {
   state = {
     bannerVisible: true,
     dataLoading: true,
-    // empty string means no filter - all possibilities - potential conflict between study_id and individual_id
-    // This was redundant with the state in SelectionMenu so I refactored to the form to not have state
+    // empty string means no filter - all possibilities
     study_id: "",
     individual_id: "",
     // Take out the date '2020-05-01' once DB updating is implemented
@@ -88,45 +87,38 @@ export default class App extends Component {
     const params = new URLSearchParams(urlParams);
 
     const url = `${baseUrl}${params}`;
-    // console.log(url)
 
-    this.setState({ dataLoading: true }, () => {
-      fetch(url)
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Something went wrong, please try again later.");
-          }
-          return res;
-        })
-        .then((res) => res.json())
-        .then((data) => {
-          // console.log(`got the data: ${data}`)
-          data.sort((a, b) => {
-            return (
-              new Date(a.time_stamp).getTime() -
-              new Date(b.time_stamp).getTime()
-            );
-          });
-          this.setState(
-            {
-              pathData: data,
-              error: null,
-              dataLoading: false,
-            },
-            () => {
-              this.setState({ shouldUpdate: false });
-            }
+    // this.setState({ dataLoading: true }, () => {
+    fetch(url)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Something went wrong, please try again later.");
+        }
+        return res;
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        // ADD ERROR HANDLING HERE FOR THE CASE IF THE FETCH FAILS -MUTATION IS NOT GOOD BUT OK FOR NOW
+        data.sort((a, b) => {
+          return (
+            new Date(a.time_stamp).getTime() - new Date(b.time_stamp).getTime()
           );
-        })
-        .catch((err) => {
-          this.setState({
-            error: err.message,
-          });
         });
-    });
+        this.setState({
+          pathData: data,
+          error: null,
+          dataLoading: false,
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          error: err.message,
+        });
+      });
+    // });
   };
 
-  // callback prop to get the form data and pass it to handleDataFetch
+  // Get the form data and pass it to handleDataFetch
   filterData = (updates) => {
     this.setState(updates, () => {
       this.handleDataFetch();
@@ -134,10 +126,8 @@ export default class App extends Component {
   };
 
   onMarkerClick = (name) => {
-    // do this later to handle the marker click
     this.setState({
       individual_id: name,
-      isRaptorClicked: true,
     });
 
     this.handleDataFetch();
@@ -151,19 +141,19 @@ export default class App extends Component {
   };
 
   render() {
-    //
-    let map;
-    if (!this.state.dataLoading) {
-      map = (
-        <div className="map-container">
-          <Map
-            observations={this.state.pathData}
-            recentData={this.state.recentData}
-            markerHandler={this.onMarkerClick}
-          />
-        </div>
-      );
-    }
+    //CHANGE THIS - Conditionally rendering the map based on data loading is disruptive
+    // let map;
+    // if (!this.state.dataLoading) {
+    //   map = (
+    //     <div className="map-container">
+    //       <Map
+    //         observations={this.state.pathData}
+    //         recentData={this.state.recentData}
+    //         markerHandler={this.onMarkerClick}
+    //       />
+    //     </div>
+    //   );
+    // }
     return (
       <div className="App">
         <Nav
@@ -178,8 +168,19 @@ export default class App extends Component {
           ) : (
             ""
           )}
-          <>{this.state.dataLoading ? <DataLoading /> : ""}</>
-          {map}
+          <>
+            {this.state.dataLoading ? (
+              <DataLoading />
+            ) : (
+              <div className="map-container">
+                <Map
+                  observations={this.state.pathData}
+                  recentData={this.state.recentData}
+                  markerHandler={this.onMarkerClick}
+                />
+              </div>
+            )}
+          </>
         </div>
       </div>
     );
