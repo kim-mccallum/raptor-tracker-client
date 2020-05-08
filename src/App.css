@@ -1,18 +1,32 @@
 body * {
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 body {
-    margin:0;
-    padding: 0;
-    color: #1c1a17;
-    font-family: 'Quicksand', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #1c1a17;
+  font-family: "Quicksand", sans-serif;
 }
-.capsule{
+
+.capsule {
   height: 100vh;
   position: absolute;
+  /* left: 25vw;
+  width: 74vw; */
   left: 15vw;
-  width:84vw;
+  width: 84vw;
   display: inline-block;
+}
+
+.app-nav {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+  color: white;
 }

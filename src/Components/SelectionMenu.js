@@ -61,9 +61,20 @@ export default class SelectionMenu extends Component {
       minDate = +moment(minDate.time_stamp).format("x");
     }
 
-    let raptorName;
+    let raptorInfo = {};
     if (this.props.raptorId !== "") {
-      raptorName = <p>Selected raptor: {this.props.raptorId}</p>;
+      raptorInfo.name = <p>Selected raptor: {this.props.raptorId}</p>;
+      // filter the recentData object by raptorId and get the species
+      raptorInfo.species = (
+        <p>
+          Species:{" "}
+          {
+            this.props.recentData.filter(
+              (obs) => obs.individual_id === this.props.raptorId
+            )[0].individual_taxon_canonical_name
+          }
+        </p>
+      );
     }
     return (
       <div className="selection-menu">
@@ -122,7 +133,8 @@ export default class SelectionMenu extends Component {
                 Specific Dates
               </button>
               <br />
-              {/* Put this in another component DateSlider that is rendered if an All button is clicked */}
+              {/* Maybe a range picker is better but the below doesn't work yet */}
+              {/* <DateRangePicker onAfterChange={this.rangeHandler} /> */}
               <fieldset
                 id="date-slider"
                 className={
@@ -146,7 +158,8 @@ export default class SelectionMenu extends Component {
                 />
               </fieldset>
             </fieldset>
-            {raptorName}
+            {raptorInfo.name}
+            {raptorInfo.species}
           </form>
         </div>
       </div>

@@ -1,14 +1,3 @@
-.app-nav {
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  padding-top: 20px;
-  color: white;
-}
-
 .logo {
   width: 75%;
   height: auto;

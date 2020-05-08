@@ -12,6 +12,16 @@ class Map extends React.Component {
   });
 
   // BREAK THIS UP INTO COMPONENTDIDUPDATE AS WELL AS MAYBE HELPER METHODS
+  fitMapToData = (observationData, paddingValue) => {
+    let ptArr = [];
+    observationData.forEach((point) => {
+      let { location_lat, location_long } = point;
+      ptArr.push([location_lat, location_long]);
+    });
+    let myBounds = new L.LatLngBounds(ptArr);
+    this.map.fitBounds(myBounds, { padding: [paddingValue, paddingValue] });
+  };
+
   // jUST CREATE THE MAP
   componentDidMount() {
     this.map = L.map("map", {
@@ -44,12 +54,6 @@ class Map extends React.Component {
     };
 
     L.control.layers(basemaps).addTo(this.map);
-
-    // Try to make a layer so you can clear
-    this.layer = L.layerGroup().addTo(this.map);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
     this.props.recentData.forEach((obs) => {
       // Potentially add style for active and inactive birds: If last date is in the last year, give a certain effect and if it's old do something else
       let marker = new L.Marker([obs.location_lat, obs.location_long], {
@@ -75,20 +79,14 @@ class Map extends React.Component {
         this.closePopup();
       });
     });
+    this.fitMapToData(this.props.recentData, 100);
 
-    const fitMapToData = (observationData, paddingValue) => {
-      let ptArr = [];
-      observationData.forEach((point) => {
-        let { location_lat, location_long } = point;
-        ptArr.push([location_lat, location_long]);
-      });
-      let myBounds = new L.LatLngBounds(ptArr);
-      this.map.fitBounds(myBounds, { padding: [paddingValue, paddingValue] });
-    };
+    // make a layer so you can clear path data layer
+    this.layer = L.layerGroup().addTo(this.map);
+  }
 
-    fitMapToData(this.props.recentData, 100);
-
-    // Try to clear the old data
+  componentDidUpdate(prevProps, prevState) {
+    // clear the old data
     this.layer.clearLayers();
     // Object with individual_id as keys and values as arrays of locations
     let obj = {};
@@ -130,13 +128,15 @@ class Map extends React.Component {
       });
     }
     // Adjust fitBounds so that zoom is appropriate for few or many observations
+    // Consider trying to find a different zoom to method as the current solutions is flaky
     if (this.props.observations.length > 10) {
-      fitMapToData(this.props.observations, 150);
+      this.fitMapToData(this.props.observations, 150);
+      // this.map.setView(this.layer.getBounds().getCenter());
     } else if (
       this.props.observations.length > 5 &&
       this.props.observations.length < 10
     ) {
-      fitMapToData(this.props.observations, 200);
+      this.fitMapToData(this.props.observations, 200);
     } else if (
       this.props.observations.length < 5 &&
       this.props.observations.length > 0
