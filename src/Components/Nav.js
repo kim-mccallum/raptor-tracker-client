@@ -7,7 +7,7 @@ export default class Nav extends Component {
     // console.log(this.props);
     return (
       <>
-        <nav className="app-nav">
+        <nav className="app-nav" id={this.props.toggleMobile ? "active" : null}>
           <img
             className="logo"
             src="https://hawkwatch.org/images/HWI-logo_tag2.png"

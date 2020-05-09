@@ -10,23 +10,41 @@ body {
   font-family: "Quicksand", sans-serif;
 }
 
+.App {
+  overflow: hidden;
+}
 .capsule {
   height: 100vh;
   position: absolute;
-  /* left: 25vw;
-  width: 74vw; */
-  left: 15vw;
-  width: 84vw;
+  left: 20vw;
+  width: 79vw;
   display: inline-block;
 }
 
 .app-nav {
   height: 100vh;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   background-color: #111;
   overflow-x: hidden;
   padding-top: 20px;
-  color: white;
+  color: #dfdac6;
+}
+
+@media screen and (max-width: 737px) {
+  .app-nav {
+    right: 0;
+    width: 300px;
+    max-width: 0;
+    transition: max-width 1s;
+    left: unset;
+    top: 60px;
+    z-index: 1500;
+  }
+
+  .capsule {
+    width: 100vw;
+    left: 0;
+  }
 }

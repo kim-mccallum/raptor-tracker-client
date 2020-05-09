@@ -81,7 +81,7 @@ export default class SelectionMenu extends Component {
         <div className="form-container">
           <form className="selectDataForm">
             <fieldset>
-              <legend>Filter data</legend>
+              <legend className="filter">Filter</legend>
               <label htmlFor="study_id">Select study:</label>
               <br />
               <select id="study_id" onChange={this.studyHandler}>
@@ -91,7 +91,6 @@ export default class SelectionMenu extends Component {
               </select>
               <br />
               <legend>Tracking period</legend>
-              {/* FIGURE OUT HOW TO ADD A CLASS TO STYLE THE ACTIVE BUTTON SO USERS KNOW WHAT IS IN STATE */}
               <button
                 name="week"
                 type="button"
@@ -130,7 +129,7 @@ export default class SelectionMenu extends Component {
                   this.state.activeButton === "specificDates" ? "active" : ""
                 }`}
               >
-                Specific Dates
+                Range
               </button>
               <br />
               {/* Maybe a range picker is better but the below doesn't work yet */}
@@ -143,7 +142,6 @@ export default class SelectionMenu extends Component {
                     : "hidden"
                 }
               >
-                <legend>Custom range</legend>
                 <label htmlFor="date-range">Select Dates:</label>
                 <Range
                   id="date-range"
@@ -158,8 +156,10 @@ export default class SelectionMenu extends Component {
                 />
               </fieldset>
             </fieldset>
-            {raptorInfo.name}
-            {raptorInfo.species}
+            <div className="raptor-info">
+              {raptorInfo.name}
+              {raptorInfo.species}
+            </div>
           </form>
         </div>
       </div>

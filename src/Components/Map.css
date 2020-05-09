@@ -1,3 +1,5 @@
+/* This is not honored by the map */
 #mapid {
-  height: 1000px;
+  width: "84vw";
+  height: "100vh";
 }

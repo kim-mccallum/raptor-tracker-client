@@ -1,13 +1,17 @@
 .logo {
-  width: 75%;
+  padding-top: 0px;
+  margin-top: 0px;
+  width: 50%;
   height: auto;
 }
-
+#active {
+  max-width: 300px;
+}
 .app-nav a {
-  padding: 6px 8px 6px 16px;
+  padding: 6px 1px 6px 10px;
   text-decoration: none;
   font-size: 16px;
-  color: #818181;
+  color: #d0ccbc;
   display: block;
 }
 .app-nav a:hover {
@@ -15,7 +19,7 @@
 }
 
 .app-nav .active {
-  color: bisque;
+  color: rgb(250, 229, 203);
 }
 
 ul {
@@ -25,7 +29,7 @@ ul {
 
 /* make two divs side by side? */
 nav {
-  width: 15vw;
+  width: 20vw;
   display: inline-block;
 }
 

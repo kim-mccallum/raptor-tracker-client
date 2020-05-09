@@ -1,9 +1,19 @@
+form {
+  font-size: 14px;
+}
+
+.filter {
+  font-size: 10px;
+}
+legend {
+  padding-top: 5px;
+}
 .btn {
+  font-size: 14px;
   border: none;
-  /* outline: none; */
-  /* padding: 4px 8px; */
   background-color: #f1f1f1;
   cursor: pointer;
+  margin: 3px;
 }
 
 /* Style the active class (and buttons on mouse-over) */
@@ -13,6 +23,13 @@
   color: white;
 }
 
+.raptor-info {
+  margin: 4px;
+  padding: 2px 10px;
+  border-radius: 5px;
+  background-color: #dfdac6;
+  color: #1c1a17;
+}
 .hidden {
   display: none;
 }

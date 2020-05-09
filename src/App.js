@@ -4,12 +4,14 @@ import Nav from "./Components/Nav";
 import Map from "./Components/Map";
 import DataLoading from "./Components/DataLoading";
 import WelcomeBanner from "./Components/WelcomeBanner";
+import MobileBanner from "./Components/MobileBanner";
 import moment from "moment";
 import "./App.css";
 
 export default class App extends Component {
   state = {
     bannerVisible: true,
+    sideNavVisible: false,
     dataLoading: true,
     // empty string means no filter - all possibilities
     study_id: "",
@@ -138,10 +140,17 @@ export default class App extends Component {
     });
   };
 
+  sideNavHandler = (e) => {
+    // toggle the sideNavState
+    this.setState({ sideNavVisible: !this.state.sideNavVisible });
+  };
+
   render() {
     return (
       <div className="App">
+        <MobileBanner toggleSideNav={this.sideNavHandler} />
         <Nav
+          toggleMobile={this.state.sideNavVisible}
           filterData={this.filterData}
           raptorId={this.state.individual_id}
           firstData={this.state.firstData}

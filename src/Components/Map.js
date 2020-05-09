@@ -1,8 +1,15 @@
 import React from "react";
 import L from "leaflet";
 import moment from "moment";
+// Do I need this???
+import "leaflet/dist/leaflet.css";
 
 class Map extends React.Component {
+  // we need state so that it is visible in the component
+  state = {
+    isMobile: false,
+  };
+
   eagleIcon = L.icon({
     // iconUrl: require('../graphics/vulture.svg'),
     iconUrl: require("../graphics/eagle-1.svg"),
@@ -11,19 +18,10 @@ class Map extends React.Component {
     popupAnchor: [0, -50],
   });
 
-  // BREAK THIS UP INTO COMPONENTDIDUPDATE AS WELL AS MAYBE HELPER METHODS
-  fitMapToData = (observationData, paddingValue) => {
-    let ptArr = [];
-    observationData.forEach((point) => {
-      let { location_lat, location_long } = point;
-      ptArr.push([location_lat, location_long]);
-    });
-    let myBounds = new L.LatLngBounds(ptArr);
-    this.map.fitBounds(myBounds, { padding: [paddingValue, paddingValue] });
-  };
-
   // jUST CREATE THE MAP
   componentDidMount() {
+    window.addEventListener("resize", this.resizeHandler);
+
     this.map = L.map("map", {
       zoomControl: false,
       preferCanvas: true,
@@ -53,7 +51,9 @@ class Map extends React.Component {
       "World Imagery": Esri_WorldImagery,
     };
 
-    L.control.layers(basemaps).addTo(this.map);
+    L.control
+      .layers(null, basemaps, { position: "bottomright" })
+      .addTo(this.map);
     this.props.recentData.forEach((obs) => {
       // Potentially add style for active and inactive birds: If last date is in the last year, give a certain effect and if it's old do something else
       let marker = new L.Marker([obs.location_lat, obs.location_long], {
@@ -150,8 +150,38 @@ class Map extends React.Component {
       );
     }
   }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.resizeHandler);
+  }
+
+  resizeHandler = (e) => {
+    console.log(window.innerWidth);
+    this.setState({ isMobile: window.innerWidth < 737 });
+  };
+
+  // BREAK THIS UP INTO COMPONENTDIDUPDATE AS WELL AS MAYBE HELPER METHODS
+  fitMapToData = (observationData, paddingValue) => {
+    let ptArr = [];
+    observationData.forEach((point) => {
+      let { location_lat, location_long } = point;
+      ptArr.push([location_lat, location_long]);
+    });
+    let myBounds = new L.LatLngBounds(ptArr);
+    this.map.fitBounds(myBounds, { padding: [paddingValue, paddingValue] });
+  };
   render() {
-    return <div style={{ width: "84vw", height: "100vh" }} id="map"></div>;
+    console.log(this.state.isMobile);
+    return (
+      <div
+        style={
+          this.state.isMobile
+            ? { width: "100vw", height: "93vh", bottom: 0 }
+            : { width: "79vw", height: "100vh" }
+        }
+        id="map"
+      ></div>
+    );
   }
 }
 export default Map;
