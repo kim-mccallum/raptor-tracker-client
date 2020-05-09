@@ -11,8 +11,8 @@ export default function WelcomeBanner(props) {
           <FontAwesomeIcon
             icon={faTimes}
             onClick={props.hideBanner}
-            // className="close-btn"
-            aria-label="Close"
+            className="close-btn"
+            aria-label="close"
           />
         </div>
 

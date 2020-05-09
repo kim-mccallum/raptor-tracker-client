@@ -144,6 +144,7 @@ export default class SelectionMenu extends Component {
               >
                 <label htmlFor="date-range">Select Dates:</label>
                 <Range
+                  pushable
                   id="date-range"
                   name="date-range"
                   min={minDate}

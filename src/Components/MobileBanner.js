@@ -10,12 +10,17 @@ export default function MobileBanner(props) {
       <figure className="logo-container">
         <img
           className="mobile-logo"
-          src="../../public/HWI-logo_tag2.png"
+          src="https://hawkwatch.org/images/HWI-logo_tag2.png"
+          //   src="../../public/HWI-logo_tag2.png"
           alt="HWI logo"
         />
       </figure>
       <h1 className="app-name">Raptor Tracker</h1>
-      <FontAwesomeIcon icon={faAlignLeft} onClick={props.toggleSideNav} />
+      <FontAwesomeIcon
+        className="menu-icon"
+        icon={faAlignLeft}
+        onClick={props.toggleSideNav}
+      />
     </div>
   );
 }

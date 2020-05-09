@@ -1,6 +1,6 @@
 .logo-container {
-  width: 100px;
-  height: 60px;
+  width: 60px;
+  height: 40px;
 }
 .mobile-logo {
   width: 100%;
@@ -9,7 +9,11 @@
 }
 
 .app-name {
-  color: red;
+  color: #dfdac6;
+}
+.menu-icon {
+  color: #dfdac6;
+  margin-right: 50px;
 }
 
 .mobile-banner {
@@ -19,6 +23,9 @@
 @media screen and (max-width: 737px) {
   .mobile-banner {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     height: 60px;
+    background-color: #111;
   }
 }
