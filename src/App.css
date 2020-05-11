@@ -39,7 +39,7 @@ body {
     max-width: 0;
     transition: max-width 1s;
     left: unset;
-    top: 60px;
+    top: 70px;
     z-index: 1500;
   }
 

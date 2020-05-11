@@ -156,11 +156,9 @@ class Map extends React.Component {
   }
 
   resizeHandler = (e) => {
-    console.log(window.innerWidth);
     this.setState({ isMobile: window.innerWidth < 737 });
   };
 
-  // BREAK THIS UP INTO COMPONENTDIDUPDATE AS WELL AS MAYBE HELPER METHODS
   fitMapToData = (observationData, paddingValue) => {
     let ptArr = [];
     observationData.forEach((point) => {
@@ -171,13 +169,13 @@ class Map extends React.Component {
     this.map.fitBounds(myBounds, { padding: [paddingValue, paddingValue] });
   };
   render() {
-    console.log(this.state.isMobile);
     return (
       <div
         style={
           this.state.isMobile
-            ? { width: "100vw", height: "93vh", bottom: 0 }
-            : { width: "79vw", height: "100vh" }
+            ? { width: "100vw", height: "90vh", bottom: 0 }
+            : // ? { width: "100vw", height: "93vh", bottom: 0 }
+              { width: "79vw", height: "100vh" }
         }
         id="map"
       ></div>
