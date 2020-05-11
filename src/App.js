@@ -5,6 +5,7 @@ import Map from "./Components/Map";
 import DataLoading from "./Components/DataLoading";
 import WelcomeBanner from "./Components/WelcomeBanner";
 import MobileBanner from "./Components/MobileBanner";
+import ErrorBoundary from "./Components/ErrorBoundary";
 import moment from "moment";
 import "./App.css";
 
@@ -53,22 +54,29 @@ export default class App extends Component {
               });
             });
         })
-      ).then((dataSets) => {
-        dataSets.forEach((data) => {
-          data.sort((a, b) => {
-            return (
-              new Date(a.time_stamp).getTime() -
-              new Date(b.time_stamp).getTime()
-            );
+      )
+        .then((dataSets) => {
+          dataSets.forEach((data) => {
+            data.sort((a, b) => {
+              return (
+                new Date(a.time_stamp).getTime() -
+                new Date(b.time_stamp).getTime()
+              );
+            });
+          });
+          this.setState({
+            recentData: dataSets[0],
+            firstData: dataSets[1],
+            error: null,
+            dataLoading: false,
+          });
+        })
+        .catch((error) => {
+          console.log(`We caught an error ${error}`);
+          this.setState({
+            error: error.message,
           });
         });
-        this.setState({
-          recentData: dataSets[0],
-          firstData: dataSets[1],
-          error: null,
-          dataLoading: false,
-        });
-      });
     });
   }
 
@@ -167,11 +175,13 @@ export default class App extends Component {
               <DataLoading />
             ) : (
               <div className="map-container">
-                <Map
-                  observations={this.state.pathData}
-                  recentData={this.state.recentData}
-                  markerHandler={this.onMarkerClick}
-                />
+                <ErrorBoundary>
+                  <Map
+                    observations={this.state.pathData}
+                    recentData={this.state.recentData}
+                    markerHandler={this.onMarkerClick}
+                  />
+                </ErrorBoundary>
               </div>
             )}
           </>
