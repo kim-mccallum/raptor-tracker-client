@@ -4,7 +4,7 @@ import React from "react";
 export default function DataLoading() {
   return (
     <div className="data-loading">
-      <h2>Data Loading!</h2>
+      <h2>Waking up the server and loading data!</h2>
     </div>
   );
 }
