@@ -2,6 +2,8 @@
 #### An interactive web application for exploring locations of GPS locations of golden eagles and African vultures tracked with solar powered GPS trackers by [HawkWatch International.](https://hawkwatch.org/) 
 ### Live application: [https://raptor-tracker-app.now.sh/](https://raptor-tracker-app.now.sh/)
 
+
+
 ### Technologies:
 This client application was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and uses [LeafletJS](https://leafletjs.com/) to render an interactive web map displaying raptor location data automatically sent by satellite powered satellite transmitters to the data [Movebank animal tracking data database](https://www.movebank.org/cms/movebank-main). To enable this web application to securely display the locations of these sensitve species, the location data are downloaded from Movebank, stored, processed and served by the [Raptor Tracker API](https://github.com/kim-mccallum/raptor-tracker-server).
 
