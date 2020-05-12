@@ -107,7 +107,7 @@ export default class App extends Component {
       })
       .then((res) => res.json())
       .then((data) => {
-        // ADD ERROR HANDLING HERE FOR THE CASE IF THE FETCH FAILS -MUTATION IS NOT GOOD BUT OK FOR NOW
+        // Mutation is not ideal but okay for now
         data.sort((a, b) => {
           return (
             new Date(a.time_stamp).getTime() - new Date(b.time_stamp).getTime()
