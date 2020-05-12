@@ -1,4 +1,4 @@
-## [Raptor Tracker](https://raptor-tracker-app.now.sh/)
+## Raptor Tracker
 #### An interactive web application for exploring locations of GPS locations of golden eagles and African vultures tracked with solar powered GPS trackers by [HawkWatch International.](https://hawkwatch.org/) 
 ### Live application: [https://raptor-tracker-app.now.sh/](https://raptor-tracker-app.now.sh/)
 
