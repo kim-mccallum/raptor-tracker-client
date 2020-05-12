@@ -4,6 +4,8 @@
 
 ![](public/images/Satellite-desktop-range.PNG)
 
+![](public/images/satellite-path-mobile-menu.PNG)
+
 ### Technologies:
 This client application was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and uses [LeafletJS](https://leafletjs.com/) to render an interactive web map displaying raptor location data automatically sent by satellite powered satellite transmitters to the data [Movebank animal tracking data database](https://www.movebank.org/cms/movebank-main). To enable this web application to securely display the locations of these sensitve species, the location data are downloaded from Movebank, stored, processed and served by the [Raptor Tracker API](https://github.com/kim-mccallum/raptor-tracker-server).
 
