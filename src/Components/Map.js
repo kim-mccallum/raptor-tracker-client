@@ -86,6 +86,11 @@ class Map extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // Don't put this here
+    // if (this.props.observations.length === 0) {
+    //   alert("No data in selection. Try another time period.");
+    // }
+
     // clear the old data
     this.layer.clearLayers();
     // Object with individual_id as keys and values as arrays of locations

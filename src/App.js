@@ -9,6 +9,8 @@ import ErrorBoundary from "./Components/ErrorBoundary";
 import moment from "moment";
 import "./App.css";
 
+// create context with the active button also with the start_time, end_time
+
 export default class App extends Component {
   state = {
     bannerVisible: true,
@@ -18,8 +20,8 @@ export default class App extends Component {
     study_id: "",
     individual_id: "",
     // Take out the date '2020-05-01' once DB updating is implemented
-    start_time: moment("2020-05-01").subtract(1, "month").format("x"),
-    end_time: moment("2020-05-01").format("x"),
+    start_time: moment("2020-05-05").subtract(1, "month").format("x"),
+    end_time: moment("2020-05-05").format("x"),
     // potentially deal with distinguishing between no data and data not yet fetched - 'loading'?
     recentData: [],
     firstData: [],
@@ -134,9 +136,41 @@ export default class App extends Component {
   };
 
   onMarkerClick = (name) => {
-    this.setState({
-      individual_id: name,
-    });
+    // get last seen date - this is inefficient - instead save the actual object for that bird
+    const lastSeen = moment(
+      this.state.recentData.filter((obs) => obs.individual_id === name)[0]
+        .time_stamp
+    );
+    console.log("first", lastSeen);
+    // if it's not in the current range in state
+    // create a custom 'month' range for that bird - last month it was seen
+    // fetch data for that time period
+    // in the Selection Menu, show the range slider with those dates
+    if (
+      !(
+        lastSeen.format("x") > this.state.start_time &&
+        lastSeen.format("x") <= this.state.end_time
+      )
+    ) {
+      console.log("Inactive bird!");
+
+      console.log(lastSeen.clone().subtract(6, "months"));
+      console.log("second", lastSeen.clone().subtract(1, "months"));
+      // create that range, setState and SOMEHOW activate the button in the SelectionMenu
+      this.setState({
+        individual_id: name,
+        start_time: lastSeen.clone().subtract(1, "months").format("x"),
+        end_time: lastSeen.format("x"),
+      });
+    } else {
+      this.setState({
+        individual_id: name,
+      });
+    }
+
+    // this.setState({
+    //   individual_id: name,
+    // });
 
     this.handleDataFetch();
   };

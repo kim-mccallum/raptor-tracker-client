@@ -7,15 +7,12 @@ import "./SelectionMenu.css";
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
-// FIX THE ACTIVATE/DEACTIVATE RAPTOR CLICK
 export default class SelectionMenu extends Component {
   state = {
     activeButton: "month",
     yearActive: false,
     monthActive: false,
     weekActive: false,
-    min: this.props.firstData[0],
-    max: 100,
   };
 
   activeDateButtonHandler = (e) => {
@@ -30,7 +27,7 @@ export default class SelectionMenu extends Component {
     // Pass the new stuff to filterData
     this.props.filterData({
       // Take out the date ''2020-05-01' once DB updating is implemented
-      start_time: moment("2020-05-01").subtract(1, e.target.name).format("x"),
+      start_time: moment("2020-05-05").subtract(1, e.target.name).format("x"),
     });
   };
 
@@ -65,6 +62,7 @@ export default class SelectionMenu extends Component {
     if (this.props.raptorId !== "") {
       raptorInfo.name = <p>Selected raptor: {this.props.raptorId}</p>;
       // filter the recentData object by raptorId and get the species
+      // put the last seen date in here too
       raptorInfo.species = (
         <p>
           Species:{" "}
@@ -72,6 +70,17 @@ export default class SelectionMenu extends Component {
             this.props.recentData.filter(
               (obs) => obs.individual_id === this.props.raptorId
             )[0].individual_taxon_canonical_name
+          }
+        </p>
+      );
+
+      raptorInfo.lastSeen = (
+        <p>
+          Last seen:{" "}
+          {
+            this.props.recentData.filter(
+              (obs) => obs.individual_id === this.props.raptorId
+            )[0].time_stamp
           }
         </p>
       );
@@ -132,8 +141,6 @@ export default class SelectionMenu extends Component {
                 Range
               </button>
               <br />
-              {/* Maybe a range picker is better but the below doesn't work yet */}
-              {/* <DateRangePicker onAfterChange={this.rangeHandler} /> */}
               <fieldset
                 id="date-slider"
                 className={
@@ -160,6 +167,7 @@ export default class SelectionMenu extends Component {
             <div className="raptor-info">
               {raptorInfo.name}
               {raptorInfo.species}
+              {raptorInfo.lastSeen}
             </div>
           </form>
         </div>
