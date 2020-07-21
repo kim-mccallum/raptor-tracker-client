@@ -72,6 +72,8 @@ export default class App extends Component {
             error: null,
             dataLoading: false,
           });
+          // call the function to trigger updates on the backend
+          this.handleDataUpdate();
         })
         .catch((error) => {
           console.log(`We caught an error ${error}`);
@@ -128,6 +130,31 @@ export default class App extends Component {
       });
   };
 
+  handleDataUpdate = () => {
+    // create a new endpoint for updating the database
+    const url = `${config.API_ENDPOINT}/update-database`;
+    fetch(url)
+      // CHECK THE RESPONSE
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Something went wrong, please try again later.");
+        }
+        return res;
+      })
+      // RETURN THE NEW DATA AS AN OBJECT AND UPDATE STATE
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        // this.setState({
+        //   recentData: data,
+        // });
+      })
+      .catch((err) => {
+        this.setState({
+          error: err.message,
+        });
+      });
+  };
   // Get the form data and pass it to handleDataFetch
   filterData = (updates) => {
     this.setState(updates, () => {
