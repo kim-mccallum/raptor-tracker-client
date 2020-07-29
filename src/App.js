@@ -30,7 +30,9 @@ export default class App extends Component {
 
   componentDidMount() {
     const urls = [
+      // last seen date/location
       `${config.API_ENDPOINT}/observations/last`,
+      // first seen date/location - age
       `${config.API_ENDPOINT}/observations/first`,
     ];
 
@@ -58,6 +60,8 @@ export default class App extends Component {
         })
       )
         .then((dataSets) => {
+          // .then(([a, b]) => {
+          //   console.log(a, b);
           dataSets.forEach((data) => {
             data.sort((a, b) => {
               return (
@@ -66,8 +70,21 @@ export default class App extends Component {
               );
             });
           });
+          //pass the array of bird birthdays and get a new attribute: isBreedingEagle
+          let newData = this.isBreedingEagle(dataSets[1]);
+          // get an array of individuals ids to KEEP
+          let eaglesToKeep = this.sortBreedingBirds(newData);
+          console.log(`we will keep these: ${eaglesToKeep}`);
+          // filter out the breeding age eagles during breeding season
+          let filteredRecentObservations = this.filterRecentData(
+            //recent data
+            dataSets[0],
+            //ids of nonBreedingEagles
+            eaglesToKeep
+          );
+          console.log(`Filtered data to map:`, filteredRecentObservations);
           this.setState({
-            recentData: dataSets[0],
+            recentData: filteredRecentObservations,
             firstData: dataSets[1],
             error: null,
             dataLoading: false,
@@ -137,6 +154,7 @@ export default class App extends Component {
       // CHECK THE RESPONSE
       .then((res) => {
         if (!res.ok) {
+          console.log(res);
           throw new Error("Something went wrong, please try again later.");
         }
         return res;
@@ -160,6 +178,74 @@ export default class App extends Component {
     this.setState(updates, () => {
       this.handleDataFetch();
     });
+  };
+  // FUNCTIONS TO HANDLE BREEDING EAGLE ISSUE - EAGLES THAT ARE OF BREEDING AGE (X YEARS) SHOULD NOT BE ADDED TO THE MAP DURING BREEDING SEASON
+  // Returns the original data with new attribute added
+  isBreedingEagle = (individuals) => {
+    // get the current date
+    let thisYear = new Date().getFullYear();
+    // add a key:value - isBreedingEagle: true/false
+    individuals.forEach((ind) => {
+      // if it's an eagle and it's older than 5 - true
+      if (ind.individual_taxon_canonical_name === "Aquila chrysaetos") {
+        let birthday = new Date(ind.time_stamp).getFullYear();
+        console.log(birthday);
+        // if they are 3 years or older
+        if (thisYear - birthday > 2) {
+          ind["isBreedingEagle"] = true;
+        } else {
+          ind["isBreedingEagle"] = false;
+        }
+      } else {
+        ind["isBreedingEagle"] = false;
+      }
+    });
+    // console.log(individuals);
+    return individuals;
+  };
+  // return an array of eagle ids to KEEP
+  sortBreedingBirds = (indviduals) => {
+    // get current date
+    const today = new Date();
+    const thisYear = today.getFullYear();
+    // start breeding - Feb 1 - CHANGE THIS FROM HARDCODED VALUE!
+    const start = new Date(`${thisYear}/2/1`);
+    // end breeding - Sep 1
+    const end = new Date(`${thisYear}/9/1`);
+    // console.log(indviduals);
+    // this is true during breeding season
+    let season = moment(today).isBetween(moment(start), moment(end));
+    console.log(`Is it golden eagle breeding season? ${season}`);
+    // if current date is in breeding season filter to remove the mature eagles
+    if (season) {
+      let nonBreedingIndividuals = indviduals.filter(
+        (ind) => !ind.isBreedingEagle
+      );
+      // filtered out breeding age
+      // return an array of ids to remove
+      console.log(
+        "ids to KEEP:",
+        nonBreedingIndividuals.map((ind) => ind.individual_id)
+      );
+      return nonBreedingIndividuals.map((ind) => ind.individual_id);
+    }
+    // if it's not breeding season, just return the whole list
+    return indviduals.map((ind) => ind.individual_id);
+  };
+  // Remove the individuals that are breeding
+  filterRecentData = (recentObservations, nonBreedingEagles) => {
+    //If there are fewer ids in the nonbreeding array, it must be breeding season
+    if (nonBreedingEagles.length < recentObservations.length) {
+      console.log("we are going to keep:", nonBreedingEagles);
+      // use a filter and the includes to return only the recentObservations with the non breeding birds
+      let filteredObservations = recentObservations.filter((ind) =>
+        nonBreedingEagles.includes(ind.individual_id)
+      );
+      // console.log("last seen locations:", filteredObservations);
+      return filteredObservations;
+    }
+    //otherwise just return the recentObservations
+    return recentObservations;
   };
 
   onMarkerClick = (name) => {
